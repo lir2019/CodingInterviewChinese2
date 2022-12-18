@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.10)
+project(JianZhiOffer)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fms-extensions")
+
+#add_definitions(-DCOMPILE_YOUR_CODE)
+
+add_subdirectory(Utilities)
+
+add_executable(01_AssignmentOperator 01_AssignmentOperator/AssignmentOperator.cpp)
+add_executable(03_01_DuplicationInArray 03_01_DuplicationInArray/FindDuplication.cpp)
+add_executable(03_02_DuplicationInArrayNoEdit 03_02_DuplicationInArrayNoEdit/FindDuplicationNoEdit.cpp)
+add_executable(04_FindInPartiallySortedMatrix 04_FindInPartiallySortedMatrix/FindInPartiallySortedMatrix.cpp)
+add_executable(05_ReplaceSpaces 05_ReplaceSpaces/ReplaceSpaces.cpp)
+add_executable(06_PrintListInReversedOrder 06_PrintListInReversedOrder/PrintListInReversedOrder.cpp)
+target_link_libraries(06_PrintListInReversedOrder PUBLIC List)
+add_executable(07_ConstructBinaryTree 07_ConstructBinaryTree/ConstructBinaryTree.cpp)
+target_link_libraries(07_ConstructBinaryTree PUBLIC BinaryTree)
+add_executable(08_NextNodeInBinaryTrees 08_NextNodeInBinaryTrees/NextNodeInBinaryTrees.cpp)
+add_executable(09_QueueWithTwoStacks 09_QueueWithTwoStacks/QueueWithTwoStacks.cpp)
+add_executable(10_Fibonacci 10_Fibonacci/Fibonacci.cpp)

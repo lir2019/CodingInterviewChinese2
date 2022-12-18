@@ -18,7 +18,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #pragma once
 #include <stack>
-#include <exception>
+#include <stdexcept>
 
 using namespace std;
 
@@ -65,7 +65,7 @@ template<typename T> T CQueue<T>::deleteHead()
     }
 
     if(stack2.size() == 0)
-        throw new exception("queue is empty");
+        throw new std::runtime_error("queue is empty");
 
     T head = stack2.top();
     stack2.pop();

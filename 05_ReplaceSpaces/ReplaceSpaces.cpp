@@ -64,7 +64,7 @@ void ReplaceBlank(char str[], int length)
 }
 
 // ====================²âÊÔ´úÂë====================
-void Test(char* testName, char str[], int length, char expected[])
+void Test(const char* testName, char str[], int length, const char expected[])
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
