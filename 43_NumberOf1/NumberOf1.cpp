@@ -17,8 +17,11 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 输入12，从1到12这些整数中包含1 的数字有1，10，11和12，1一共出现了5次。
 
 #include <cstdio>
+#include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <vector>
+#include <cmath>
 
 // ====================方法一====================
 int NumberOf1(unsigned int n);
@@ -101,13 +104,16 @@ int PowerBase10(unsigned int n)
     return result;
 }
 
+int LrNumberOf1Between1AndN_Solution1(int n) {
+}
+
 // ====================测试代码====================
 void Test(const char* testName, int n, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: \n", testName);
     
-    if(NumberOf1Between1AndN_Solution1(n) == expected)
+    if(LrNumberOf1Between1AndN_Solution1(n) == expected)
         printf("Solution1 passed.\n");
     else
         printf("Solution1 failed.\n"); 
