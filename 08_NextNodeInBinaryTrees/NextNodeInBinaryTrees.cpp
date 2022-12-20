@@ -56,6 +56,27 @@ BinaryTreeNode* GetNext(BinaryTreeNode* pNode)
     return pNext;
 }
 
+BinaryTreeNode* LrGetNext(BinaryTreeNode* pNode) {
+  if (pNode == nullptr) {
+    return nullptr;
+  }
+  if (pNode->m_pRight) {
+    auto left_most = pNode->m_pRight;
+    while (left_most->m_pLeft) {
+      left_most = left_most->m_pLeft;
+    }
+    return left_most;
+  }
+  auto ancestor = pNode;
+  while (ancestor->m_pParent != nullptr && ancestor == ancestor->m_pParent->m_pRight) {
+    ancestor = ancestor->m_pParent;
+  }
+  if (ancestor->m_pParent == nullptr) {
+    return nullptr;
+  }
+  return ancestor->m_pParent;
+}
+
 // ==================== 辅助代码用来构建二叉树 ====================
 BinaryTreeNode* CreateBinaryTreeNode(int value)
 {
@@ -141,7 +162,7 @@ void Test(char* testName, BinaryTreeNode* pNode, BinaryTreeNode* expected)
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    BinaryTreeNode* pNext = GetNext(pNode);
+    BinaryTreeNode* pNext = LrGetNext(pNode);
     if(pNext == expected)
         printf("Passed.\n");
     else

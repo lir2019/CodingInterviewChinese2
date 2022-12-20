@@ -21,6 +21,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 #include <exception>
 #include <stdexcept>
 #include <cstdio>
+#include <algorithm>
 
 struct BinaryTreeNode 
 {
@@ -168,6 +169,30 @@ BinaryTreeNode* ConstructCore
     return root;
 }
 
+BinaryTreeNode* LrConstruct(int* preorder, int* inorder, int length) {
+  if (preorder == nullptr || inorder == nullptr || length <= 0) {
+    return nullptr;
+  }
+  BinaryTreeNode *parents = new BinaryTreeNode();
+  parents->m_nValue = *preorder;
+  parents->m_pLeft = nullptr;
+  parents->m_pRight = nullptr;
+  auto inorder_parents_pos = std::find(inorder, inorder + length, *preorder);
+  if (inorder_parents_pos == inorder + length) {
+    std::logic_error ex("Invalid input.");
+    throw std::exception(ex);
+  }
+  auto lchild_length = inorder_parents_pos - inorder;
+  auto rchild_length = length - 1 - lchild_length;
+  int *lchild_inorder = inorder;
+  int *rchild_inorder = inorder_parents_pos + 1;
+  int *lchild_preorder = preorder + 1;
+  int *rchild_preorder = preorder + 1 + lchild_length;
+  parents->m_pLeft = LrConstruct(lchild_preorder, lchild_inorder, lchild_length);;
+  parents->m_pRight = LrConstruct(rchild_preorder, rchild_inorder, rchild_length);;
+  return parents;
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(char* testName, int* preorder, int* inorder, int length)
 {
@@ -186,7 +211,7 @@ void Test(char* testName, int* preorder, int* inorder, int length)
 
     try
     {
-        BinaryTreeNode* root = Construct(preorder, inorder, length);
+        BinaryTreeNode* root = LrConstruct(preorder, inorder, length);
         PrintTree(root);
 
         DestroyTree(root);
