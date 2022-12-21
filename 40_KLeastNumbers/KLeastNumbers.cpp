@@ -17,14 +17,59 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 这8个数字，则最小的4个数字是1、2、3、4。
 
 #include <cstdio>
-#include "..\Utilities\Array.h"
 
 #include <set>
 #include <vector>
 #include <iostream>
 #include <functional>
+#include <stdlib.h>
+#include <exception>
+#include <stdexcept>
 
 using namespace std;
+
+int Partition(int data[], int length, int start, int end);
+
+// Random Partition
+int RandomInRange(int min, int max)
+{
+    int random = rand() % (max - min + 1) + min;
+    return random;
+}
+
+void Swap(int* num1, int* num2)
+{
+    int temp = *num1;
+    *num1 = *num2;
+    *num2 = temp;
+}
+
+int Partition(int data[], int length, int start, int end)
+{
+    if(data == nullptr || length <= 0 || start < 0 || end >= length) {
+      std::logic_error ex("Invalid Parameters");
+      throw new std::exception(ex);
+    }
+
+    int index = RandomInRange(start, end);
+    Swap(&data[index], &data[end]);
+
+    int small = start - 1;
+    for(index = start; index < end; ++ index)
+    {
+        if(data[index] < data[end])
+        {
+            ++ small;
+            if(small != index)
+                Swap(&data[index], &data[small]);
+        }
+    }
+
+    ++ small;
+    Swap(&data[small], &data[end]);
+
+    return small;
+}
 
 // ====================方法1====================
 void GetLeastNumbers_Solution1(int* input, int n, int* output, int k)
@@ -83,6 +128,53 @@ void GetLeastNumbers_Solution2(const vector<int>& data, intSet& leastNumbers, in
     }
 }
 
+int LrPartition(int *input, int b, int e, int k) {
+  if (e - b == 1) {
+    return k;
+  } else if (e - b == 2) {
+    if (input[b] > input[e-1]) {
+      std::swap(input[b], input[e-1]);
+    }
+    return k;
+  }
+
+  int m = (b + e) / 2;
+  int pivot = input[m];
+  int f = b;
+  int l = e - 1;
+  while (l > f) {
+    while (input[f] <= pivot) {
+      f++;
+    }
+    while (input[l] > pivot) {
+      l--;
+    }
+    if (l > f) {
+      std::swap(input[l], input[f]);
+    }
+  }
+  return l;
+}
+
+void LrGetLeastNumbers_Solution(int* input, int n, int* output, int k) {
+  if (k > n || !input || !output) return;
+  k--;
+  int b = 0, e = n;
+  int tmp_k = LrPartition(input, 0, n, k);
+
+  while (tmp_k != k) {
+    if (tmp_k > k) {
+      e = tmp_k;
+    } else if (tmp_k < k){
+      b = tmp_k;
+    }
+    tmp_k = LrPartition(input, b, e, k);
+  }
+  for (int i = 0; i <= k; i++) {
+    output[i] = input[i];
+  }
+}
+
 // ====================测试代码====================
 void Test(char* testName, int* data, int n, int* expectedResult, int k)
 {
@@ -105,7 +197,7 @@ void Test(char* testName, int* data, int n, int* expectedResult, int k)
 
     printf("Result for solution1:\n");
     int* output = new int[k];
-    GetLeastNumbers_Solution1(data, n, output, k);
+    LrGetLeastNumbers_Solution(data, n, output, k);
     if(expectedResult != nullptr)
     {
         for(int i = 0; i < k; ++ i)
