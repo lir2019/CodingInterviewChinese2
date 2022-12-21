@@ -119,6 +119,18 @@ long long Fibonacci_Solution3(unsigned int n)
     return PowerNMinus2.m_00;
 }
 
+long long LrFibonacci_Solution(unsigned int n) {
+  if (n <= 1) {
+    return n;
+  }
+  int tmp[2] = {0, 1};
+  for (int m = 2; m <= n; m++) {
+    int p = m % 2;
+    tmp[p] = tmp[0] + tmp[1];
+  }
+  return tmp[n % 2];
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int n, int expected)
 {
@@ -136,6 +148,11 @@ void Test(int n, int expected)
         printf("Test for %d in solution3 passed.\n", n);
     else
         printf("Test for %d in solution3 failed.\n", n);
+
+    if(LrFibonacci_Solution(n) == expected)
+        printf("Test for %d in Lr solution passed.\n", n);
+    else
+        printf("Test for %d in Lr solution failed.\n", n);
 }
 
 int main(int argc, char* argv[])

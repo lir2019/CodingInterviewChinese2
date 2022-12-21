@@ -19,13 +19,17 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include <exception>
+#include <stdexcept>
+#include <algorithm>
 
 int MinInOrder(int* numbers, int index1, int index2);
 
 int Min(int* numbers, int length)
 {
-    if(numbers == nullptr || length <= 0)
-        throw new std::exception("Invalid parameters");
+    if(numbers == nullptr || length <= 0) {
+        std::logic_error ex("Invalid parameters");
+        throw new std::exception(ex);
+    }
  
     int index1 = 0;
     int index2 = length - 1;
@@ -69,13 +73,30 @@ int MinInOrder(int* numbers, int index1, int index2)
     return result;
 }
 
+int LrMin(int *numbers, int length) {
+  int begin = 0;
+  int end = length;
+  int mid = (begin + end) / 2; // 0~mid-1, mid, mid+1~length-1
+  if (length == 1) {
+    return *numbers;
+  }
+  if (length == 2) {
+    return std::min(*numbers, *(numbers+1));
+  }
+  if (numbers[mid] >= numbers[0]) {
+    return LrMin(numbers+mid+1, end - mid - 1);
+  } else if (numbers[mid] < numbers[0]) {
+    return LrMin(numbers, mid);
+  }
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int* numbers, int length, int expected)
 {
     int result = 0;
     try
     {
-        result = Min(numbers, length);
+        result = LrMin(numbers, length);
 
         for(int i = 0; i < length; ++i)
             printf("%d ", numbers[i]);
