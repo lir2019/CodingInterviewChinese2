@@ -79,10 +79,35 @@ bool equal(double num1, double num2)
         return false;
 }
 
+
+double LrPower(double base, int exponent) {
+  g_InvalidInput = false;
+  if (base == 0) {
+    if (exponent < 0) {
+      g_InvalidInput = true;
+      return 0.0;
+    }
+  }
+  double tmp = base;
+  int pos = 0;
+  bool is_neg = exponent < 0;
+  int n = is_neg ? -exponent : exponent;
+  double prod = 1;
+  while (n > 0) {
+    if (n % 2) {
+      prod *= tmp;
+    }
+    n /= 2;
+    tmp = tmp * tmp;
+    pos++;
+  }
+  return is_neg ? 1 / prod : prod;
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(const char* testName, double base, int exponent, double expectedResult, bool expectedFlag)
 {
-    double result = Power(base, exponent);
+    double result = LrPower(base, exponent);
     if (equal(result, expectedResult) && g_InvalidInput == expectedFlag)
         std::cout << testName << " passed" << std::endl;
     else

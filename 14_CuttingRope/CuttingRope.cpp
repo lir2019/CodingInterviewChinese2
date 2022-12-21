@@ -20,6 +20,8 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <iostream>
 #include <cmath>
+#include <vector>
+#include <algorithm>
 
 // ====================动态规划====================
 int maxProductAfterCutting_solution1(int length)
@@ -80,6 +82,25 @@ int maxProductAfterCutting_solution2(int length)
     return (int) (pow(3, timesOf3)) * (int) (pow(2, timesOf2));
 }
 
+
+int LrmaxProductAfterCutting_solution(int length) {
+  std::vector<int> solutions{0, 1, 2, 3};
+  if (length < 0) {
+    throw;
+  }
+  if (length <= 3) {
+    return solutions[length];
+  }
+  for (int n = 4; n <= length; n++) {
+    int s = -1;
+    for (int i = 1; i <= n - i; i++) {
+      s = std::max(s, solutions[i] * solutions[n - i]);
+    }
+    solutions.push_back(s);
+  }
+  return solutions.back();
+}
+
 // ====================测试代码====================
 void test(const char* testName, int length, int expected)
 {
@@ -91,6 +112,12 @@ void test(const char* testName, int length, int expected)
 
     int result2 = maxProductAfterCutting_solution2(length);
     if(result2 == expected)
+        std::cout << "Solution2 for " << testName << " passed." << std::endl;
+    else
+        std::cout << "Solution2 for " << testName << " FAILED." << std::endl;
+
+    int result3 = LrmaxProductAfterCutting_solution(length);
+    if(result3 == expected)
         std::cout << "Solution2 for " << testName << " passed." << std::endl;
     else
         std::cout << "Solution2 for " << testName << " FAILED." << std::endl;

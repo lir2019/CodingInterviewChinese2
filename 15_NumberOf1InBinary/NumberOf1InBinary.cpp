@@ -46,6 +46,17 @@ int NumberOf1_Solution2(int n)
     return count;
 }
 
+int LrNumberOf1_Solution(int n) {
+  bool is_neg = n < 0;
+  int abs_n = is_neg ? ~n : n;
+  int sum = 0;
+  while (abs_n > 0) {
+    sum += abs_n % 2;
+    abs_n /= 2;
+  }
+  return is_neg ? sizeof(int) * 8 - sum : sum;
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int number, unsigned int expected)
 {
@@ -56,6 +67,12 @@ void Test(int number, unsigned int expected)
         printf("Solution1: Test for %p failed.\n", number);
 
     actual = NumberOf1_Solution2(number);
+    if (actual == expected)
+        printf("Solution2: Test for %p passed.\n", number);
+    else
+        printf("Solution2: Test for %p failed.\n", number);
+
+    actual = LrNumberOf1_Solution(number);
     if (actual == expected)
         printf("Solution2: Test for %p passed.\n", number);
     else

@@ -18,6 +18,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include <memory>
+#include <cstring>
 
 void PrintNumber(char* number);
 bool Increment(char* number);
@@ -131,12 +132,50 @@ void PrintNumber(char* number)
     printf("\t");
 }
 
+int Increment(char *nstr, int length) {
+  bool flag = true;
+  for (int i = length - 1; i >= 0; i--) {
+    if (flag) {
+      if (nstr[i] == '9') {
+        nstr[i] = '0';
+        flag = true;
+      } else {
+        nstr[i]++;
+        flag = false;
+        break;
+      }
+    }
+  }
+  if (flag) {
+    length++;
+    nstr[0] = '1';
+    for (int i = 1; i < length; i++) {
+      nstr[i] = '0';
+    }
+  }
+  return length;
+}
+
+void LrPrint1ToMaxOfNDigits(int n) {
+  if (n <= 0) {
+    return;
+  }
+  char *nstr = new char[n+2];
+  memset(nstr, 0, n+2);
+  nstr[0] = '1';
+  int length = 1;
+  do {
+    printf("%s\t", nstr);
+    length = Increment(nstr, length);
+  } while (length <= n);
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int n)
 {
     printf("Test for %d begins:\n", n);
 
-    Print1ToMaxOfNDigits_1(n);
+    LrPrint1ToMaxOfNDigits(n);
     Print1ToMaxOfNDigits_2(n);
 
     printf("\nTest for %d ends.\n", n);

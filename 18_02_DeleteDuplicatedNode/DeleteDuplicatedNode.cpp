@@ -17,7 +17,130 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 结点被删除之后，链表如图3.4（b）所示。
 
 #include <cstdio>
-#include "../Utilities/list.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+struct ListNode
+{
+    int       m_nValue;
+    ListNode* m_pNext;
+};
+
+ListNode* CreateListNode(int value);
+void ConnectListNodes(ListNode* pCurrent, ListNode* pNext);
+void PrintListNode(ListNode* pNode);
+void PrintList(ListNode* pHead);
+void DestroyList(ListNode* pHead);
+void AddToTail(ListNode** pHead, int value);
+void RemoveNode(ListNode** pHead, int value);
+
+ListNode* CreateListNode(int value)
+{
+    ListNode* pNode = new ListNode();
+    pNode->m_nValue = value;
+    pNode->m_pNext = nullptr;
+
+    return pNode;
+}
+
+void ConnectListNodes(ListNode* pCurrent, ListNode* pNext)
+{
+    if(pCurrent == nullptr)
+    {
+        printf("Error to connect two nodes.\n");
+        exit(1);
+    }
+
+    pCurrent->m_pNext = pNext;
+}
+
+void PrintListNode(ListNode* pNode)
+{ 
+    if(pNode == nullptr)
+    {
+        printf("The node is nullptr\n");
+    }
+    else
+    {
+        printf("The key in node is %d.\n", pNode->m_nValue);
+    }
+}
+
+void PrintList(ListNode* pHead)
+{
+    printf("PrintList starts.\n");
+    
+    ListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        printf("%d\t", pNode->m_nValue);
+        pNode = pNode->m_pNext;
+    }
+
+    printf("\nPrintList ends.\n");
+}
+
+void DestroyList(ListNode* pHead)
+{
+    ListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        pHead = pHead->m_pNext;
+        delete pNode;
+        pNode = pHead;
+    }
+}
+
+void AddToTail(ListNode** pHead, int value)
+{
+    ListNode* pNew = new ListNode();
+    pNew->m_nValue = value;
+    pNew->m_pNext = nullptr;
+
+    if(*pHead == nullptr)
+    {
+        *pHead = pNew;
+    }
+    else
+    {
+        ListNode* pNode = *pHead;
+        while(pNode->m_pNext != nullptr)
+            pNode = pNode->m_pNext;
+
+        pNode->m_pNext = pNew;
+    }
+}
+
+void RemoveNode(ListNode** pHead, int value)
+{
+    if(pHead == nullptr || *pHead == nullptr)
+        return;
+
+    ListNode* pToBeDeleted = nullptr;
+    if((*pHead)->m_nValue == value)
+    {
+        pToBeDeleted = *pHead;
+        *pHead = (*pHead)->m_pNext;
+    }
+    else
+    {
+        ListNode* pNode = *pHead;
+        while(pNode->m_pNext != nullptr && pNode->m_pNext->m_nValue != value)
+            pNode = pNode->m_pNext;
+
+        if(pNode->m_pNext != nullptr && pNode->m_pNext->m_nValue == value)
+        {
+            pToBeDeleted = pNode->m_pNext;
+            pNode->m_pNext = pNode->m_pNext->m_pNext;
+        }
+    }
+
+    if(pToBeDeleted != nullptr)
+    {
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+    }
+}
 
 void DeleteDuplication(ListNode** pHead)
 {
@@ -61,13 +184,37 @@ void DeleteDuplication(ListNode** pHead)
     }
 }
 
+void LrDeleteDuplication(ListNode **pHead) {
+  if (pHead == nullptr || *pHead == nullptr) {
+    return;
+  }
+  ListNode *pre = *pHead;
+  if (pre->m_pNext == nullptr) {
+    return;
+  }
+  if (pre->m_nValue == pre->m_pNext->m_nValue) {
+    while (pre->m_pNext != nullptr && pre->m_nValue == pre->m_pNext->m_nValue) {
+      auto next = pre->m_pNext;
+      pre->m_pNext = next->m_pNext;
+      delete next;
+      next = nullptr;
+    }
+    *pHead = pre->m_pNext;
+    delete pre;
+    pre = nullptr;
+    LrDeleteDuplication(pHead);
+  } else {
+    LrDeleteDuplication(&((*pHead)->m_pNext));
+  }
+}
+
 // ====================测试代码====================
 void Test(char* testName, ListNode** pHead, int* expectedValues, int expectedLength)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    DeleteDuplication(pHead);
+    LrDeleteDuplication(pHead);
 
     int index = 0;
     ListNode* pNode = *pHead;

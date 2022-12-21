@@ -17,7 +17,130 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // Ω·µ„°£
 
 #include <cstdio>
-#include "..\Utilities\List.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+struct ListNode
+{
+    int       m_nValue;
+    ListNode* m_pNext;
+};
+
+ListNode* CreateListNode(int value);
+void ConnectListNodes(ListNode* pCurrent, ListNode* pNext);
+void PrintListNode(ListNode* pNode);
+void PrintList(ListNode* pHead);
+void DestroyList(ListNode* pHead);
+void AddToTail(ListNode** pHead, int value);
+void RemoveNode(ListNode** pHead, int value);
+
+ListNode* CreateListNode(int value)
+{
+    ListNode* pNode = new ListNode();
+    pNode->m_nValue = value;
+    pNode->m_pNext = nullptr;
+
+    return pNode;
+}
+
+void ConnectListNodes(ListNode* pCurrent, ListNode* pNext)
+{
+    if(pCurrent == nullptr)
+    {
+        printf("Error to connect two nodes.\n");
+        exit(1);
+    }
+
+    pCurrent->m_pNext = pNext;
+}
+
+void PrintListNode(ListNode* pNode)
+{ 
+    if(pNode == nullptr)
+    {
+        printf("The node is nullptr\n");
+    }
+    else
+    {
+        printf("The key in node is %d.\n", pNode->m_nValue);
+    }
+}
+
+void PrintList(ListNode* pHead)
+{
+    printf("PrintList starts.\n");
+    
+    ListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        printf("%d\t", pNode->m_nValue);
+        pNode = pNode->m_pNext;
+    }
+
+    printf("\nPrintList ends.\n");
+}
+
+void DestroyList(ListNode* pHead)
+{
+    ListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        pHead = pHead->m_pNext;
+        delete pNode;
+        pNode = pHead;
+    }
+}
+
+void AddToTail(ListNode** pHead, int value)
+{
+    ListNode* pNew = new ListNode();
+    pNew->m_nValue = value;
+    pNew->m_pNext = nullptr;
+
+    if(*pHead == nullptr)
+    {
+        *pHead = pNew;
+    }
+    else
+    {
+        ListNode* pNode = *pHead;
+        while(pNode->m_pNext != nullptr)
+            pNode = pNode->m_pNext;
+
+        pNode->m_pNext = pNew;
+    }
+}
+
+void RemoveNode(ListNode** pHead, int value)
+{
+    if(pHead == nullptr || *pHead == nullptr)
+        return;
+
+    ListNode* pToBeDeleted = nullptr;
+    if((*pHead)->m_nValue == value)
+    {
+        pToBeDeleted = *pHead;
+        *pHead = (*pHead)->m_pNext;
+    }
+    else
+    {
+        ListNode* pNode = *pHead;
+        while(pNode->m_pNext != nullptr && pNode->m_pNext->m_nValue != value)
+            pNode = pNode->m_pNext;
+
+        if(pNode->m_pNext != nullptr && pNode->m_pNext->m_nValue == value)
+        {
+            pToBeDeleted = pNode->m_pNext;
+            pNode->m_pNext = pNode->m_pNext->m_pNext;
+        }
+    }
+
+    if(pToBeDeleted != nullptr)
+    {
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+    }
+}
 
 void DeleteNode(ListNode** pListHead, ListNode* pToBeDeleted)
 {
@@ -56,6 +179,38 @@ void DeleteNode(ListNode** pListHead, ListNode* pToBeDeleted)
     }
 }
 
+void LrDeleteNode(ListNode **pHead, ListNode *pNode) {
+  if (pHead == nullptr || pNode == nullptr) {
+    return;
+  }
+  if (pNode->m_pNext == nullptr) {
+    auto pre = *pHead;
+    if (pre == pNode) {
+      *pHead = nullptr;
+      delete pNode;
+      pNode = nullptr;
+    } else {
+      while (pre->m_pNext != pNode && pre->m_pNext != nullptr) {
+        pre = pre->m_pNext;
+      }
+      if (pre->m_pNext == nullptr) {
+        throw;
+      }
+      if (pre->m_pNext == pNode) {
+        pre->m_pNext = nullptr;
+        delete pNode;
+        pNode = nullptr;
+      }
+    }
+  } else {
+    auto next = pNode->m_pNext;
+    pNode->m_nValue = next->m_nValue;
+    pNode->m_pNext = next->m_pNext;
+    delete next;
+  }
+  return;
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(ListNode* pListHead, ListNode* pNode)
 {
@@ -65,7 +220,7 @@ void Test(ListNode* pListHead, ListNode* pNode)
     printf("The node to be deleted is: \n");
     PrintListNode(pNode);
 
-    DeleteNode(&pListHead, pNode);
+    LrDeleteNode(&pListHead, pNode);
     
     printf("The result list is: \n");
     PrintList(pListHead);
