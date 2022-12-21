@@ -19,6 +19,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 但它不能进入方格(35, 38)，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
 
 #include <cstdio>
+#include <vector>
 
 int movingCountCore(int threshold, int rows, int cols, int row, int col, bool* visited);
 bool check(int threshold, int rows, int cols, int row, int col, bool* visited);
@@ -80,9 +81,45 @@ int getDigitSum(int number)
     {
         sum += number % 10;
         number /= 10;
-    }
-
+    } 
     return sum;
+}
+
+void LrmovingCountCore(int threshold, int rows, int cols, std::vector<bool> &mark, int x, int y) {
+  if (x < 0 || y < 0 || x >= rows || y >= cols) {
+    return;
+  }
+  int pos = x * cols + y;
+
+  auto sum_digit = [] (int e) -> int {
+    int sum = 0;
+    while (e > 0) {
+      sum += e % 10;
+      e = e / 10;
+    }
+    return sum;
+  };
+
+  if (mark[pos] == false && sum_digit(x) + sum_digit(y) <= threshold) {
+    mark[pos] = true;
+    LrmovingCountCore(threshold, rows, cols, mark, x + 1, y);
+    LrmovingCountCore(threshold, rows, cols, mark, x - 1, y);
+    LrmovingCountCore(threshold, rows, cols, mark, x, y + 1);
+    LrmovingCountCore(threshold, rows, cols, mark, x, y - 1);
+  }
+}
+
+int LrmovingCount(int threshold, int rows, int cols) {
+  std::vector<bool> mark;
+  mark.resize(rows * cols, false);
+  LrmovingCountCore(threshold, rows, cols, mark, 0, 0);
+  int sum = 0;
+  for (auto e : mark) {
+    if (e) {
+      sum++;
+    }
+  }
+  return sum;
 }
 
 // ====================测试代码====================
@@ -91,7 +128,7 @@ void test(char* testName, int threshold, int rows, int cols, int expected)
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(movingCount(threshold, rows, cols) == expected)
+    if(LrmovingCount(threshold, rows, cols) == expected)
         printf("Passed.\n");
     else
         printf("FAILED.\n");

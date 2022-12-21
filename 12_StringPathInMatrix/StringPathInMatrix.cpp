@@ -25,6 +25,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include <string>
+#include <cstring>
 #include <stack>
 
 using namespace std;
@@ -90,13 +91,58 @@ bool hasPathCore(const char* matrix, int rows, int cols, int row,
     return hasPath;
 }
 
+bool LrhasPathCore(const char *matrix, int rows, int cols, int x, int y, bool *mark, const char *str) {
+  if (str == nullptr) {
+    throw;
+  }
+  if (*str == '\0') {
+    return true;
+  }
+  if (x >= rows || y >= cols || x < 0 || y < 0) {
+    return false;
+  }
+  int pos = x * cols + y;
+  if (*str == *(matrix + pos) && *(mark + pos) == false) {
+    *(mark + pos) = true;
+    bool has_path =  LrhasPathCore(matrix, rows, cols, x + 1, y, mark, str + 1) ||
+                     LrhasPathCore(matrix, rows, cols, x - 1, y, mark, str + 1) ||
+                     LrhasPathCore(matrix, rows, cols, x, y + 1, mark, str + 1) ||
+                     LrhasPathCore(matrix, rows, cols, x, y - 1, mark, str + 1);
+    if (has_path) {
+      return true;
+    } else {
+      *(mark + pos) = false;
+      return false;
+    }
+  }
+  return false;
+}
+
+bool LrhasPath(const char *matrix, int rows, int cols, const char *str) {
+  bool *mark = new bool[rows * cols];
+  for (int x = 0; x < rows; x++) {
+    for (int y = 0; y < cols; y++) {
+      *(mark + x * cols + y) = false;
+    }  
+  }  
+  for (int x = 0; x < rows; x++) {
+    for (int y = 0; y < cols; y++) {
+      if (LrhasPathCore(matrix, rows, cols, x, y, mark, str)) {
+        return true;
+      }
+    }
+  }
+  delete [] mark;
+  return false;
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(const char* testName, const char* matrix, int rows, int cols, const char* str, bool expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(hasPath(matrix, rows, cols, str) == expected)
+    if(LrhasPath(matrix, rows, cols, str) == expected)
         printf("Passed.\n");
     else
         printf("FAILED.\n");

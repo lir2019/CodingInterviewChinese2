@@ -74,19 +74,51 @@ int MinInOrder(int* numbers, int index1, int index2)
 }
 
 int LrMin(int *numbers, int length) {
+  if (numbers == nullptr) {
+        std::logic_error ex("Invalid parameters");
+        throw new std::exception(ex);
+  }
   int begin = 0;
   int end = length;
-  int mid = (begin + end) / 2; // 0~mid-1, mid, mid+1~length-1
-  if (length == 1) {
-    return *numbers;
+  while (end - begin >= 3) {
+    int mid = (begin + end) / 2; // 0~mid-1, mid, mid+1~length-1
+    int f = numbers[begin];
+    int m = numbers[mid];
+    int l = numbers[end - 1];
+    if (f == m) {
+      if (m == l) {
+        int min = f;
+        for (int i = begin + 1; i < end; i++) {
+          min = std::min(min, numbers[i]);
+        }
+        return min;
+      } else if (m < l) {
+        return m;
+      } else {
+        begin = mid;
+      }
+    } else if (f < m) {
+      if (m <= l) {
+        return f;
+      } else {
+        if (f < l) {
+          std::logic_error ex("Invalid parameters");
+          throw new std::exception(ex);
+        } else {
+          begin = mid;
+        }
+      }
+    } else {
+      end = mid + 1;
+    }
   }
-  if (length == 2) {
-    return std::min(*numbers, *(numbers+1));
-  }
-  if (numbers[mid] >= numbers[0]) {
-    return LrMin(numbers+mid+1, end - mid - 1);
-  } else if (numbers[mid] < numbers[0]) {
-    return LrMin(numbers, mid);
+  if (end - begin == 0) {
+        std::logic_error ex("Invalid parameters");
+        throw new std::exception(ex);
+  } else if (end - begin == 1) {
+    return numbers[begin];
+  } else if (end - begin == 2) {
+    return std::min(numbers[begin], numbers[begin + 1]);
   }
 }
 
