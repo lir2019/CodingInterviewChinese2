@@ -17,6 +17,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 奇数位于数组的前半部分，所有偶数位于数组的后半部分。
 
 #include <cstdio>
+#include <algorithm>
 
 void Reorder(int *pData, unsigned int length, bool (*func)(int));
 bool isEven(int n);
@@ -99,6 +100,23 @@ void PrintArray(int numbers[], int length)
     printf("\n");
 }
 
+void LrReorderOddEven(int *copy, int length) {
+  if (length <= 1) {
+    return;
+  }
+  int b = 0;
+  int e = length - 1;
+  while (true) {
+    while (copy[b] % 2 == 1 && b < length) b++;
+    while (copy[e] % 2 == 0 && e > 0) e--;
+    if (e > b) {
+      std::swap(copy[b], copy[e]);
+    } else {
+      break;
+    }
+  }
+}
+
 void Test(char* testName, int numbers[], int length)
 {
     if(testName != nullptr)
@@ -117,7 +135,7 @@ void Test(char* testName, int numbers[], int length)
 
     printf("Test for solution 2:\n");
     PrintArray(copy, length);
-    ReorderOddEven_2(copy, length);
+    LrReorderOddEven(copy, length);
     PrintArray(copy, length);
 
     delete[] copy;
