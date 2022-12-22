@@ -75,13 +75,51 @@ bool scanInteger(const char** str)
     return scanUnsignedInteger(str);
 }
 
+int LrNextStatus(const char *str, int now) {
+  static int switch_table[4][8] = { 1, -1, -1, -1,  5, -1, -1, -1,
+                                    2,  2,  2,  3,  6,  6,  6,  3,
+                                    7,  7,  3, -1, -1, -1, -1, -1,
+                                   -1, -1,  4,  4, -1, -1, -1, -1};
+  if (now == -1) {
+    return -1;
+  }
+  char c = str[0];
+  int row = -1;
+  int col = now;
+  if (c == '+' || c == '-') {
+    row = 0;
+  } else if (c - '0' >= 0 && c - '0' <= 9) {
+    row = 1;
+  } else if (c == '.') {
+    row = 2;
+  } else if (c == 'e' || c == 'E') {
+    row = 3;
+  } else {
+    return -1;
+  }
+  return switch_table[row][col];
+}
+
+bool LrisNumeric(const char* str) {
+  if (str == nullptr) return false;
+  int status = 0;
+  while (*str != '\0') {
+    status = LrNextStatus(str, status);
+    str++;
+  }
+  if (status == 2 || status == 3 || status == 6) {
+    return true;
+  }
+  return false;
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(const char* testName, const char* str, bool expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(isNumeric(str) == expected)
+    if(LrisNumeric(str) == expected)
         printf("Passed.\n");
     else
         printf("FAILED.\n");

@@ -19,6 +19,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 和"ab*ac*a"匹配，但与"aa.a"及"ab*a"均不匹配。
 
 #include <cstdio>
+#include <cstring>
 
 bool matchCore(const char* str, const char* pattern);
 
@@ -58,13 +59,93 @@ bool matchCore(const char* str, const char* pattern)
     return false;
 }
 
+enum class Status {
+  ST0 = 0, // end
+  ST1 = 1, // c
+  ST2 = 2, // c*
+  ST3 = 3, // .
+  ST4 = 4, // .*
+};
+
+Status LrGetStatus(const char *pat) {
+  if (strlen(pat) == 0) {
+    return Status::ST0;
+  }
+  if (pat[0] != '.') {
+    if ((strlen(pat) == 1) || (strlen(pat) > 1 && pat[1] != '*')) {
+      return Status::ST1;
+    } else {
+      return Status::ST2;
+    }
+  } else {
+    if ((strlen(pat) == 1) || (strlen(pat) > 1 && pat[1] != '*')) {
+      return Status::ST3;
+    } else {
+      return Status::ST4;
+    }
+  }
+  return Status::ST0;
+}
+
+bool Lrmatch(const char *str, const char *pat) {
+  if (str[0] == '\0' && pat[0] == '\0') {
+    return true;
+  }
+  switch (LrGetStatus(pat)) {
+    case Status::ST0: {
+        // \0
+        if (strlen(str) == 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } break;
+    case Status::ST1: {
+        // c
+        if (strlen(str) == 0) {
+          return false;
+        }
+        if (str[0] == pat[0]) {
+          return Lrmatch(str + 1, pat + 1);
+        }
+      } break;
+    case Status::ST2: {
+        // c*
+        if (strlen(str) == 0) {
+          return Lrmatch(str, pat + 2);
+        }
+        if (str[0] == pat[0]) {
+          return Lrmatch(str + 1, pat) || Lrmatch(str, pat + 2);
+        } else {
+          return Lrmatch(str, pat + 2);
+        }
+      } break;
+    case Status::ST3: {
+        // .
+        if (strlen(str) == 0) {
+          return false;
+        }
+        return Lrmatch(str + 1, pat + 1);
+      } break;
+    case Status::ST4: {
+        // .*
+        if (strlen(str) == 0) {
+          return Lrmatch(str, pat + 2);
+        }
+        return Lrmatch(str + 1, pat) || Lrmatch(str, pat + 2);
+      } break;
+      default: break;
+  }
+  return false;
+}
+
 // ====================测试代码====================
 void Test(const char* testName, const char* string, const char* pattern, bool expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(match(string, pattern) == expected)
+    if(Lrmatch(string, pattern) == expected)
         printf("Passed.\n");
     else
         printf("FAILED.\n");
