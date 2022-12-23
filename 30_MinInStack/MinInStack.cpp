@@ -18,8 +18,10 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include "StackWithMin.h"
+#include <stack>
 
-void Test(const char* testName, const StackWithMin<int>& stack, int expected)
+template <typename T>
+void Test(const char* testName, const T& stack, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
@@ -30,9 +32,35 @@ void Test(const char* testName, const StackWithMin<int>& stack, int expected)
         printf("Failed.\n");
 }
 
+
+template <typename T>
+class LrStackWithMin {
+public:
+  LrStackWithMin() = default;
+  ~LrStackWithMin() = default;
+  void push(T e) {
+    data_stack.push(e);
+    if (min_stack.empty()) {
+      min_stack.push(e);
+    } else {
+      min_stack.push(std::min(e, min_stack.top()));
+    }
+  }
+  void pop() {
+    data_stack.pop();
+    min_stack.pop();
+  }
+  T min() const {
+    return min_stack.top();
+  }
+private:
+  std::stack<T> data_stack;
+  std::stack<T> min_stack;
+};
+
 int main(int argc, char* argv[])
 {
-    StackWithMin<int> stack;
+    LrStackWithMin<int> stack;
 
     stack.push(3);
     Test("Test1", stack, 3);

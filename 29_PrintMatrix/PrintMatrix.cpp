@@ -83,6 +83,37 @@ void printNumber(int number)
     printf("%d\t", number);
 }
 
+void LrPrintMatrixClockwisely(int** numbers, int c1, int c2, int r1, int r2) {
+  if (c2 - c1 <= 0 || r2 - r1 <= 0) {
+    return;
+  }
+  int c = c1;
+  int r = r1;
+  for(; c < c2; c++) {
+    printf("%d\t", numbers[r][c]);
+  }
+  c--;
+  r++;
+  for(; r < r2; r++) {
+    printf("%d\t", numbers[r][c]);
+  }
+  r--;
+  c--;
+  for(; c >= c1 && r > r1; c--) {
+    printf("%d\t", numbers[r][c]);
+  }
+  c++;
+  r--;
+  for(; r >= r1 + 1 && c < c2 - 1; r--) {
+    printf("%d\t", numbers[r][c]);
+  }
+  LrPrintMatrixClockwisely(numbers, c1 + 1, c2 - 1, r1 + 1, r2 - 1);
+}
+
+void LrPrintMatrixClockwisely(int** numbers, int cols, int rows) {
+  LrPrintMatrixClockwisely(numbers, 0, cols, 0, rows);
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int columns, int rows)
 {
@@ -101,7 +132,7 @@ void Test(int columns, int rows)
         }
     }
 
-    PrintMatrixClockwisely(numbers, columns, rows);
+    LrPrintMatrixClockwisely(numbers, columns, rows);
     printf("\n");
 
     for(int i = 0; i < rows; ++i)
