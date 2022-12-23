@@ -102,10 +102,70 @@ void DestroyTree(BinaryTreeNode* pRoot)
     }
 }
 
+bool LrIsTreeTop(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2) {
+  bool left_is_top = false;
+  bool right_is_top = false;
+  if (pRoot1 == nullptr) {
+    if (pRoot2 == nullptr) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if (pRoot2 == nullptr) {
+      return true;
+    }
+  }
+  if (pRoot1->m_dbValue == pRoot2->m_dbValue) {
+    if (pRoot2->m_pLeft != nullptr) {
+      if (pRoot1->m_pLeft != nullptr) {
+        left_is_top = LrIsTreeTop(pRoot1->m_pLeft, pRoot2->m_pLeft);
+      } else {
+        left_is_top = false;
+      }
+    } else {
+      if (pRoot1->m_pLeft != nullptr) {
+        left_is_top = true;
+      } else {
+        left_is_top = true;
+      }
+    }
+    if (pRoot2->m_pRight != nullptr) {
+      if (pRoot1->m_pRight != nullptr) {
+        right_is_top = LrIsTreeTop(pRoot1->m_pRight, pRoot2->m_pRight);
+      } else {
+        right_is_top = false;
+      }
+    } else {
+      if (pRoot1->m_pRight != nullptr) {
+        right_is_top = true;
+      } else {
+        right_is_top = true;
+      }
+    }
+  }
+  return left_is_top && right_is_top;
+}
+
+bool LrHasSubtree(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2) {
+  if (pRoot1 == nullptr || pRoot2 == nullptr) {
+    return false;
+  }
+  bool has_sub_tree = false;
+  if (pRoot1->m_pLeft != nullptr) {
+    has_sub_tree = LrHasSubtree(pRoot1->m_pLeft, pRoot2);
+  }
+  has_sub_tree = has_sub_tree || LrIsTreeTop(pRoot1, pRoot2);
+  if (pRoot1->m_pRight != nullptr) {
+    has_sub_tree = has_sub_tree || LrHasSubtree(pRoot1->m_pRight, pRoot2);
+  }
+  return has_sub_tree;
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(char* testName, BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2, bool expected)
 {
-    if(HasSubtree(pRoot1, pRoot2) == expected)
+    if(LrHasSubtree(pRoot1, pRoot2) == expected)
         printf("%s passed.\n", testName);
     else
         printf("%s failed.\n", testName);
