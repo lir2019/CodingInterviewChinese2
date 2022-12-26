@@ -55,13 +55,51 @@ bool VerifySquenceOfBST(int sequence[], int length)
     return (left && right);
 }
 
+int LrIsPartitionBy(int sequence[], int length) {
+  int pivot = sequence[length - 1];
+  int i = 0;
+  while (i < length - 1 && sequence[i] < pivot) {
+    i++;
+  }
+  int j = i;
+  while (i < length - 1 && sequence[i] > pivot) {
+    i++;
+  }
+  if (i == length - 1) {
+    return j;
+  }
+  return -1;
+}
+
+bool LrVerifySquenceOfBST(int sequence[], int length) {
+  if (sequence == nullptr) {
+    return false;
+  }
+  if (length <= 1) {
+    return true;
+  }
+  int partition = LrIsPartitionBy(sequence, length);
+  if (partition != -1) {
+    bool lp = true;
+    bool rp = true;
+    if (partition > 0) {
+      lp = LrIsPartitionBy(sequence, partition) != -1;
+    }
+    if (length - 1 - partition > 0) {
+      rp = LrIsPartitionBy(sequence + partition, length - 1 - partition) != -1;
+    }
+    return  lp && rp;
+  }
+  return false;
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(const char* testName, int sequence[], int length, bool expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(VerifySquenceOfBST(sequence, length) == expected)
+    if(LrVerifySquenceOfBST(sequence, length) == expected)
         printf("passed.\n");
     else
         printf("failed.\n");
