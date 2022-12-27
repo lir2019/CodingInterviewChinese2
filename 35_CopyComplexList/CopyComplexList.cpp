@@ -18,7 +18,57 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 结点外，还有一个m_pSibling 指向链表中的任意结点或者nullptr。
 
 #include <cstdio>
-#include "ComplexList.h"
+#include <vector>
+#include <map>
+
+struct ComplexListNode
+{
+    int                 m_nValue;
+    ComplexListNode*    m_pNext;
+    ComplexListNode*    m_pSibling;
+};
+
+ComplexListNode* CreateNode(int nValue);
+void BuildNodes(ComplexListNode* pNode, ComplexListNode* pNext, ComplexListNode* pSibling);
+void PrintList(ComplexListNode* pHead);
+
+ComplexListNode* CreateNode(int nValue)
+{
+    ComplexListNode* pNode = new ComplexListNode();
+    
+    pNode->m_nValue = nValue;
+    pNode->m_pNext = nullptr;
+    pNode->m_pSibling = nullptr;
+
+    return pNode;
+}
+
+void BuildNodes(ComplexListNode* pNode, ComplexListNode* pNext, ComplexListNode* pSibling)
+{
+    if(pNode != nullptr)
+    {
+        pNode->m_pNext = pNext;
+        pNode->m_pSibling = pSibling;
+    }
+}
+
+void PrintList(ComplexListNode* pHead)
+{
+    ComplexListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        printf("The value of this node is: %d.\n", pNode->m_nValue);
+
+        if(pNode->m_pSibling != nullptr)
+            printf("The value of its sibling is: %d.\n", pNode->m_pSibling->m_nValue);
+        else
+            printf("This node does not have a sibling.\n");
+
+        printf("\n");
+
+        pNode = pNode->m_pNext;
+    }
+}
 
 void CloneNodes(ComplexListNode* pHead);
 void ConnectSiblingNodes(ComplexListNode* pHead);
@@ -87,6 +137,36 @@ ComplexListNode* ReconnectNodes(ComplexListNode* pHead)
     return pClonedHead;
 }
 
+ComplexListNode* LrClone(ComplexListNode* pHead) {
+  std::vector<ComplexListNode *> list;
+  std::map<ComplexListNode *, int> node_idx_map;
+  ComplexListNode *pNode = pHead;
+  int idx = 0;
+  while (pNode) {
+    list.push_back(pNode);
+    node_idx_map[pNode] = idx;
+    pNode = pNode->m_pNext;
+    idx++;
+  }
+  std::vector<ComplexListNode *> new_list;
+  for (int i = 0; i < idx; i++) {
+    ComplexListNode * new_node = new ComplexListNode{list[i]->m_nValue, nullptr, nullptr};
+    new_list.push_back(new_node);
+  }
+  for (int i = 0; i < idx; i++) {
+    if (i < idx - 1) {
+      new_list[i]->m_pNext = new_list[i+1];
+    }
+    if (list[i]->m_pSibling) {
+      new_list[i]->m_pSibling = new_list[node_idx_map[list[i]->m_pSibling]];
+    }
+  }
+  if (new_list.empty()) {
+    return nullptr;
+  }
+  return new_list.front();
+}
+
 // ====================测试代码====================
 void Test(const char* testName, ComplexListNode* pHead)
 {
@@ -96,7 +176,7 @@ void Test(const char* testName, ComplexListNode* pHead)
     printf("The original list is:\n");
     PrintList(pHead);
 
-    ComplexListNode* pClonedHead = Clone(pHead);
+    ComplexListNode* pClonedHead = LrClone(pHead);
 
     printf("The cloned list is:\n");
     PrintList(pClonedHead);
