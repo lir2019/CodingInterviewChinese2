@@ -18,7 +18,53 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 出现了5次，超过数组长度的一半，因此输出2。
 
 #include <cstdio>
-#include "..\Utilities\Array.h"
+#include <stdlib.h>
+#include <exception>
+#include <stdexcept>
+#include <algorithm>
+
+int Partition(int data[], int length, int start, int end);
+
+// Random Partition
+int RandomInRange(int min, int max)
+{
+    int random = rand() % (max - min + 1) + min;
+    return random;
+}
+
+void Swap(int* num1, int* num2)
+{
+    int temp = *num1;
+    *num1 = *num2;
+    *num2 = temp;
+}
+
+int Partition(int data[], int length, int start, int end)
+{
+    if(data == nullptr || length <= 0 || start < 0 || end >= length) {
+        std::logic_error ex("Invalid Parameters");
+        throw new std::exception(ex);
+    }
+
+    int index = RandomInRange(start, end);
+    Swap(&data[index], &data[end]);
+
+    int small = start - 1;
+    for(index = start; index < end; ++ index)
+    {
+        if(data[index] < data[end])
+        {
+            ++ small;
+            if(small != index)
+                Swap(&data[index], &data[small]);
+        }
+    }
+
+    ++ small;
+    Swap(&data[small], &data[end]);
+
+    return small;
+}
 
 bool g_bInputInvalid = false;
 
@@ -108,6 +154,61 @@ int MoreThanHalfNum_Solution2(int* numbers, int length)
     return result;
 }
 
+int LrCore(int *numbers, int begin, int end) {
+  int max_pos = end - 1;
+  int is_same = true;
+  for (int i = 0; i < end - 1; i++) {
+    if (numbers[i] != numbers[max_pos]) {
+      if (numbers[i] > numbers[max_pos]) {
+        std::swap(numbers[i], numbers[max_pos]);
+      }
+      is_same = false;
+      break;
+    }
+  }
+  if (is_same) {
+    return begin;
+  }
+  int pivot = numbers[end - 1];
+  int b = begin;
+  int e = end - 1;
+  while (true) {
+    while (numbers[b] < pivot && b < end - 1) b++;
+    while (numbers[e] >= pivot && e > 0) e--;
+    if (e > b) {
+      std::swap(numbers[b], numbers[e]);
+    } else {
+      break;
+    }
+  }
+  if (b != end - 1) {
+    std::swap(numbers[b], numbers[end - 1]);
+  }
+  return b;
+}
+
+int LrMoreThanHalfNum_Solution(int* numbers, int length) {
+  int b = 0;
+  int e = length;
+  int t = LrCore(numbers, b, e);
+  while (true) {
+    if (e - b < (length + 1) / 2) {
+      g_bInputInvalid = true;
+      return 0;
+    }
+    if (t == b) {
+      return numbers[b];
+    }
+    if (e - t >= (length + 1) / 2) {
+      b = t;
+    } else {
+      e = t;
+    }
+    t = LrCore(numbers, b, e);
+  }
+  return 0;
+}
+
 // ====================测试代码====================
 void Test(char* testName, int* numbers, int length, int expectedValue, bool expectedFlag)
 {
@@ -126,7 +227,7 @@ void Test(char* testName, int* numbers, int length, int expectedValue, bool expe
         printf("Failed.\n");
 
     printf("Test for solution2: ");
-    result = MoreThanHalfNum_Solution2(copy, length);
+    result = LrMoreThanHalfNum_Solution(copy, length);
     if(result == expectedValue && g_bInputInvalid == expectedFlag)
         printf("Passed.\n");
     else
