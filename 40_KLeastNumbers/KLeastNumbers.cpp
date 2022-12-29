@@ -128,47 +128,41 @@ void GetLeastNumbers_Solution2(const vector<int>& data, intSet& leastNumbers, in
     }
 }
 
-int LrPartition(int *input, int b, int e, int k) {
-  if (e - b == 1) {
-    return k;
-  } else if (e - b == 2) {
-    if (input[b] > input[e-1]) {
-      std::swap(input[b], input[e-1]);
-    }
-    return k;
+int LrPartition(int *input, int begin, int end) {
+  if (end - begin <= 0) {
+    return begin;
   }
-
-  int m = (b + e) / 2;
-  int pivot = input[m];
-  int f = b;
-  int l = e - 1;
-  while (l > f) {
-    while (input[f] <= pivot) {
-      f++;
-    }
-    while (input[l] > pivot) {
-      l--;
-    }
-    if (l > f) {
-      std::swap(input[l], input[f]);
+  int pivot = input[end - 1];
+  int b = begin;
+  int e = end - 2;
+  while (true) {
+    while(input[b] < pivot && b < end - 1) b++;
+    while(input[e] >= pivot && e > 0) e--;
+    if (e > b) {
+      std::swap(input[b], input[e]);
+    } else {
+      break;
     }
   }
-  return l;
+  if (b != end - 1 && end - 1 >= 0) {
+    std::swap(input[b], input[end - 1]);
+  }
+  return b;
 }
 
 void LrGetLeastNumbers_Solution(int* input, int n, int* output, int k) {
   if (k > n || !input || !output) return;
-  k--;
-  int b = 0, e = n;
-  int tmp_k = LrPartition(input, 0, n, k);
+  int b = 0;
+  int e = n;
+  int m = LrPartition(input, b, e);
 
-  while (tmp_k != k) {
-    if (tmp_k > k) {
-      e = tmp_k;
-    } else if (tmp_k < k){
-      b = tmp_k;
+  while (m != k) {
+    if (m > k) {
+      e = m;
+    } else if (m < k){
+      b = m + 1;
     }
-    tmp_k = LrPartition(input, b, e, k);
+    m = LrPartition(input, b, e);
   }
   for (int i = 0; i <= k; i++) {
     output[i] = input[i];
