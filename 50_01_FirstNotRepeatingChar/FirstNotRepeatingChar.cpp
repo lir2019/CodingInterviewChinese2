@@ -45,10 +45,98 @@ char FirstNotRepeatingChar(const char* pString)
     return '\0';
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+char LrFirstNotRepeatingChar(const char *pString) {
+  constexpr int char_num = 256;
+  if (pString == nullptr) {
+    return '\0';
+  }
+  int *times = new int[char_num];
+  for (int i = 0; i < char_num; i++) {
+    times[i] = 0;
+  }
+  const char *p = pString;
+  while(*p != '\0') {
+    times[*p]++;
+    p++;
+  }
+  p = pString;
+  while(*p != '\0' && times[*p] != 1) {
+    p++;
+  }
+  if (*p == '\0') {
+    return '\0';
+  }
+  delete [] times;
+  return *p;
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(const char* pString, char expected)
 {
-    if(FirstNotRepeatingChar(pString) == expected)
+    if(LrFirstNotRepeatingChar(pString) == expected)
         printf("Test passed.\n");
     else
         printf("Test failed.\n");

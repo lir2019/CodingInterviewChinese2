@@ -18,6 +18,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 习惯上我们把1当做第一个丑数。
 
 #include <cstdio>
+#include <algorithm>
 
 // ====================算法1的代码====================
 bool IsUgly(int number)
@@ -94,10 +95,80 @@ int Min(int number1, int number2, int number3)
     return min;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrGetUglyNumber_Solution(int index) {
+  if (index < 1) {
+    return 0;
+  }
+  if (index == 1) {
+    return 1;
+  }
+  int *ugly_num_array = new int[index];
+  ugly_num_array[0] = 1;
+  int cur_idx = 0;
+  int *max_mul2_idx = ugly_num_array;
+  int *max_mul3_idx = ugly_num_array;
+  int *max_mul5_idx = ugly_num_array;
+  while (cur_idx + 1 < index) {
+    cur_idx++;
+    ugly_num_array[cur_idx] = std::min(std::min(*max_mul2_idx * 2, *max_mul3_idx * 3), *max_mul5_idx * 5);
+    while(*max_mul2_idx * 2 <= ugly_num_array[cur_idx]) max_mul2_idx++;
+    while(*max_mul3_idx * 3 <= ugly_num_array[cur_idx]) max_mul3_idx++;
+    while(*max_mul5_idx * 5 <= ugly_num_array[cur_idx]) max_mul5_idx++;
+  }
+  int ret = ugly_num_array[index - 1];
+  delete [] ugly_num_array;
+  return ret;
+  
+}
+
 // ====================测试代码====================
 void Test(int index, int expected)
 {
-    if(GetUglyNumber_Solution1(index) == expected)
+    if(LrGetUglyNumber_Solution(index) == expected)
         printf("solution1 passed\n");
     else
         printf("solution1 failed\n");

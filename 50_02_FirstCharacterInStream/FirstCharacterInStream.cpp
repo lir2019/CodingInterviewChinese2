@@ -20,6 +20,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 #include <cstdio>
 #include <vector>
 #include <limits>
+#include <map>
 
 using namespace std;
 
@@ -67,8 +68,98 @@ private:
     int index;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class LrCharStatistics {
+public:
+  char FirstAppearingOnce() {
+    int ret = '\0';
+    int pos = std::numeric_limits<int>::max();
+    for (auto char_pos : char_pos_map) {
+      if (char_pos.second < pos) {
+        pos = char_pos.second;
+        ret = char_pos.first;
+      }
+    }
+    return ret;
+  }
+  void Insert(char c) {
+    times[c]++;
+    cur_idx++;
+    if (times[c] == 1) {
+      char_pos_map.insert(std::make_pair(int(c), cur_idx));
+    } else if (times[c] == 2) {
+      char_pos_map.erase(int(c));
+    }
+  }
+private:
+  static constexpr int char_num = 256;
+  int cur_idx = -1;
+  std::vector<int> times = std::vector<int>(char_num, 0);
+  std::map<int, int> char_pos_map;
+};
+
+
+
 // ====================≤‚ ‘¥˙¬Î====================
-void Test(const char* testName, CharStatistics chars, char expected)
+template <typename T>
+void Test(const char* testName, T chars, char expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
@@ -81,7 +172,7 @@ void Test(const char* testName, CharStatistics chars, char expected)
 
 int main(int argc, char* argv[])
 {
-    CharStatistics chars;
+    LrCharStatistics chars;
 
     Test("Test1", chars, '\0');
 

@@ -19,6 +19,44 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 #include <string>
 #include <iostream>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 方法一：蛮力法
 bool hasDuplication(const std::string& str, int position[]);
 
@@ -96,10 +134,78 @@ int longestSubstringWithoutDuplication_2(const std::string& str)
     return maxLength;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrlongestSubstringWithoutDuplication(const std::string &input) {
+  if (input.size() <= 1) {
+    return input.size();
+  }
+  constexpr int letter_num = 26;
+  int *last_appear = new int[letter_num];
+  for (int i = 0; i < letter_num; i++) {
+    last_appear[i] = -1;
+  }
+  int longest_right = 1;
+  int longest = 1;
+  last_appear[input[0] - 'a'] = 0;
+  for (int i = 1; i < input.size(); i++) {
+    int last_pos = last_appear[input[i] - 'a'];
+    if (last_pos < 0) {
+      longest_right++;
+    } else {
+      int d = i - last_pos;
+      if (d > longest_right) {
+        longest_right++;
+      } else {
+        longest_right = d;
+      }
+    }
+    last_appear[input[i] - 'a'] = i;
+    longest = std::max(longest, longest_right);
+  }
+  return longest;
+}
+
+
 // ====================测试代码====================
 void testSolution1(const std::string& input, int expected)
 {
-    int output = longestSubstringWithoutDuplication_1(input);
+    int output = LrlongestSubstringWithoutDuplication(input);
     if(output == expected)
         std::cout << "Solution 1 passed, with input: " << input << std::endl;
     else
