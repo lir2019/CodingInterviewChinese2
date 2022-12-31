@@ -86,10 +86,34 @@ int getMaxValue_solution2(const int* values, int rows, int cols)
     return maxValue;
 }
 
+
+int LrgetMaxValue_solution(const int* values, int rows, int cols) {
+  int *max_values = new int[rows * cols];
+  for (int r = 0; r < rows; r++) {
+    for (int c = 0; c < cols; c++) {
+      int bias = r * cols + c;
+      if (r == 0 && c == 0) {
+        max_values[bias] = values[bias];
+      } else {
+        if (r == 0 && c != 0) {
+          max_values[bias] = max_values[bias - 1] + values[bias];
+        } else if (r != 0 && c == 0) {
+          max_values[bias] = max_values[bias - cols] + values[bias];
+        } else {
+          max_values[bias] = std::max(max_values[bias - cols], max_values[bias - 1]) + values[bias];
+        }
+      }
+    }
+  }
+  int max_value = max_values[rows * cols - 1];
+  delete [] max_values;
+  return max_value;
+}
+
 // ====================²âÊÔ´úÂë====================
 void test(const char* testName, const int* values, int rows, int cols, int expected)
 {
-    if(getMaxValue_solution1(values, rows, cols) == expected)
+    if(LrgetMaxValue_solution(values, rows, cols) == expected)
         std::cout << testName << ": solution1 passed." << std::endl;
     else
         std::cout << testName << ": solution1 FAILED." << std::endl;

@@ -19,6 +19,8 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
@@ -71,10 +73,76 @@ int beginNumber(int digits)
 	return (int) std::pow(10, digits - 1);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrdigitAtIndex(int index) {
+  std::vector<int> v{0, 0, 10};
+  for (int i = 3; index >= v.back(); i++) {
+    int n = i - 1;
+    v.push_back(v[n] + (int)std::pow(10, n - 1) * 9 * n);
+  }
+  int w = v.size() - 2;
+  int offset = index - v[w];
+  int pre_n = offset / w + (w > 1 ? (int)std::pow(10, w - 1) : 0) - 1;
+  int this_n = pre_n + 1;
+  int bias = offset % w;
+  for (int i = w - 1; i > bias; i--) {
+    this_n /= 10;
+  }
+  return this_n % 10;
+}
+
+
 // ====================≤‚ ‘¥˙¬Î====================
 void test(const char* testName, int inputIndex, int expectedOutput)
 {
-	if(digitAtIndex(inputIndex) == expectedOutput)
+	if(LrdigitAtIndex(inputIndex) == expectedOutput)
 		cout << testName << " passed." << endl;
 	else
 		cout << testName << " FAILED." << endl;

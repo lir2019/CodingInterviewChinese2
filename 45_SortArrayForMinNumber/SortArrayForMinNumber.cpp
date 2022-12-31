@@ -18,8 +18,10 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 字能排成的最小数字321323。
 
 #include "cstdio"
+#include "string.h"
 #include <string>
 #include <algorithm>
+#include <set>
 
 int compare(const void* strNumber1, const void* strNumber2);
 
@@ -68,6 +70,41 @@ int compare(const void* strNumber1, const void* strNumber2)
     return strcmp(g_StrCombine1, g_StrCombine2);
 }
 
+std::string LrGetMin(std::set<std::string> str_set) {
+  if (str_set.empty()) {
+    return std::string();
+  }
+  std::set<std::string> str_set_bk(str_set);
+  std::set<std::string> min_str_set;
+  do {
+    std::string min_str = *str_set.begin();
+    min_str_set.insert(min_str);
+    str_set.erase(min_str);
+  } while (str_set.size() > 0 && str_set.begin()->front() == min_str_set.begin()->front());
+  std::string total_min_str;
+  for (auto each_min_str : min_str_set) {
+    str_set_bk.erase(each_min_str);
+    std::string tmp_min_str = each_min_str + LrGetMin(str_set_bk);
+    str_set_bk.insert(each_min_str);
+    if (total_min_str.empty()) {
+      total_min_str = tmp_min_str;
+    } else {
+      total_min_str = std::min(total_min_str, tmp_min_str);
+    }
+  }
+  return total_min_str;
+  
+}
+
+void LrPrintMinNumber(int *numbers, int length) {
+  std::set<std::string> str_set;
+  for (int i = 0; i < length; i++) {
+    if (numbers[i] <= 0) continue;
+    str_set.insert(std::to_string(numbers[i]));
+  }
+  printf("%s\n", LrGetMin(str_set).c_str());
+}
+
 // ====================测试代码====================
 void Test(const char* testName, int* numbers, int length, const char* expectedResult)
 {
@@ -78,7 +115,7 @@ void Test(const char* testName, int* numbers, int length, const char* expectedRe
         printf("Expected result is: \t%s\n", expectedResult);
 
     printf("Actual result is: \t");
-    PrintMinNumber(numbers, length);
+    LrPrintMinNumber(numbers, length);
 
     printf("\n");
 }

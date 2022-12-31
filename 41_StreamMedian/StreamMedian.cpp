@@ -21,6 +21,7 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 #include <algorithm>
 #include <vector>
 #include <functional>
+#include <stdexcept>
 
 using namespace std;
 
@@ -66,8 +67,10 @@ public:
     T GetMedian()
     {
         int size = min.size() + max.size();
-        if(size == 0)
-            throw exception("No numbers are available");
+        if(size == 0) {
+            std::logic_error ex("No numbers are available");
+            throw exception(ex);
+        }
 
         T median = 0;
         if((size & 1) == 1)
@@ -83,8 +86,104 @@ private:
     vector<T> max;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+template<typename T>
+class LrDynamicArray {
+public:
+  void Insert(T x) {
+    if (min_vec.size() == max_vec.size() && max_vec.size() == 0) {
+      max_vec.push_back(x);
+      return;
+    }
+    T median = GetMedian();
+    if (x > median) {
+      if (min_vec.size() >= max_vec.size()) {
+        max_vec.push_back(x);
+        std::push_heap(max_vec.begin(), max_vec.end(), std::greater<T>());
+      } else if (min_vec.size() < max_vec.size()) {
+        std::pop_heap(max_vec.begin(), max_vec.end(), std::greater<T>());
+        max_vec[max_vec.size() - 1] = x;
+        std::push_heap(max_vec.begin(), max_vec.end(), std::greater<T>());
+        min_vec.push_back(median);
+        std::push_heap(min_vec.begin(), min_vec.end(), std::less<T>());
+      }
+    } else {
+      if (max_vec.size() >= min_vec.size()) {
+        min_vec.push_back(x);
+        std::push_heap(min_vec.begin(), min_vec.end(), std::less<T>());
+      } else if (max_vec.size() < min_vec.size()) {
+        std::pop_heap(min_vec.begin(), min_vec.end(), std::less<T>());
+        min_vec[min_vec.size() - 1] = x;
+        std::push_heap(min_vec.begin(), min_vec.end(), std::less<T>());
+        max_vec.push_back(median);
+        std::push_heap(max_vec.begin(), max_vec.end(), std::greater<T>());
+      }
+    }
+    return;
+  }
+  T GetMedian() {
+    if (min_vec.size() == max_vec.size()) {
+      if (min_vec.size() == 0) {
+        std::logic_error ex("No numbers are available");
+        throw exception(ex);
+      }
+      return (max_vec.front() + min_vec.front()) / 2;
+    } else if (min_vec.size() < max_vec.size()) {
+      return max_vec.front();
+    } else {
+      return min_vec.front();
+    }
+  }
+private:
+  std::vector<T> min_vec;
+  std::vector<T> max_vec;
+};
+
+
+
+
+
+
 // ====================≤‚ ‘¥˙¬Î====================
-void Test(char* testName, DynamicArray<double>& numbers, double expected)
+void Test(char* testName, LrDynamicArray<double>& numbers, double expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
@@ -97,7 +196,7 @@ void Test(char* testName, DynamicArray<double>& numbers, double expected)
 
 int main(int argc, char* argv[])
 {
-    DynamicArray<double> numbers;
+    LrDynamicArray<double> numbers;
 
     printf("Test1 begins: ");
     try

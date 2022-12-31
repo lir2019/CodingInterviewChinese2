@@ -105,6 +105,25 @@ int PowerBase10(unsigned int n)
 }
 
 int LrNumberOf1Between1AndN_Solution1(int n) {
+  if (n <= 0) {
+    return 0;
+  }
+  int number_of_1 = 0;
+  int pow10 = 1;
+  int exp = 0;
+  while (n / pow10 >= 10) {
+    pow10 *= 10;
+    exp++;
+  }
+  int first_digit = n / pow10;
+  int mod = n % pow10;
+  if (first_digit == 1) {
+    number_of_1 += mod + 1;
+  } else {
+    number_of_1 += pow10;
+  }
+  number_of_1 += exp * pow10 / 10 * first_digit;
+  return number_of_1 + LrNumberOf1Between1AndN_Solution1(mod);
 }
 
 // ====================≤‚ ‘¥˙¬Î====================

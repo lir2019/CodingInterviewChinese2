@@ -71,10 +71,99 @@ int GetTranslationCount(const string& number)
     return count;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrCore(const char *num_cstr, int len) {
+  if (len == 1) {
+    return 1;
+  }
+  int a = 1;
+  int b = 1;
+  if (num_cstr[0] == '1' || (num_cstr[0] == '2' && num_cstr[1] <= '5')) {
+    b++;
+  }
+  for (int i = 2; i < len; i++) {
+    int c;
+    if (num_cstr[i-1] == '1' || (num_cstr[i-1] == '2' && num_cstr[i] <= '5')) {
+      c = a + b;
+    } else {
+      c = b;
+    }
+    a = b;
+    b = c;
+  }
+  return b;
+}
+
+
+int LrGetTranslationCount(int number) {
+  if (number < 0) {
+    return 0;
+  }
+  std::string num_str = std::to_string(number);
+  return LrCore(num_str.c_str(), num_str.size());
+}
+
+
+
+
 // ====================²âÊÔ´úÂë====================
 void Test(const string& testName, int number, int expected)
 {
-    if(GetTranslationCount(number) == expected)
+    if(LrGetTranslationCount(number) == expected)
         cout << testName << " passed." << endl;
     else
         cout << testName << " FAILED." << endl;
