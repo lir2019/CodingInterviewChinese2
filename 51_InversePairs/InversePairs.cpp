@@ -76,13 +76,109 @@ int InversePairsCore(int* data, int* copy, int start, int end)
     return left + right + count;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrInversePairs(int* data, int length) {
+  if (data == nullptr || length == 1) {
+    return 0;
+  }
+  int llen = length / 2;
+  int rlen = length - llen;
+  int *ldata = data;
+  int *rdata = data + llen;
+  int lnum = LrInversePairs(ldata, llen);
+  int rnum = LrInversePairs(rdata, rlen);
+  int *tmp_data = new int[length];
+  int lidx = 0;
+  int ridx = 0;
+  int total_num = lnum + rnum;
+  for (int i = 0; i < length; i++) {
+    if (lidx == llen) {
+      tmp_data[i] = rdata[ridx];
+      ridx++;
+    } else if (ridx == rlen) {
+      tmp_data[i] = ldata[lidx];
+      total_num += ridx;
+      lidx++;
+    } else {
+      if (ldata[lidx] > rdata[ridx]) {
+        tmp_data[i] = rdata[ridx];
+        ridx++;
+      } else {
+        tmp_data[i] = ldata[lidx];
+        total_num += ridx;
+        lidx++;
+      }
+    }
+  }
+  for (int i = 0; i < length; i++) {
+    data[i] = tmp_data[i];
+  }
+  delete [] tmp_data;
+  return total_num;
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(char* testName, int* data, int length, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(InversePairs(data, length) == expected)
+    if(LrInversePairs(data, length) == expected)
         printf("Passed.\n");
     else
         printf("Failed.\n");

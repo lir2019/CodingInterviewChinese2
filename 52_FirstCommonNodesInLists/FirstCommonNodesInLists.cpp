@@ -16,7 +16,132 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 题目：输入两个链表，找出它们的第一个公共结点。
 
 #include <cstdio>
-#include "..\Utilities\List.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <cmath>
+#include <algorithm>
+
+struct ListNode
+{
+    int       m_nValue;
+    ListNode* m_pNext;
+};
+
+ListNode* CreateListNode(int value);
+void ConnectListNodes(ListNode* pCurrent, ListNode* pNext);
+void PrintListNode(ListNode* pNode);
+void PrintList(ListNode* pHead);
+void DestroyList(ListNode* pHead);
+void AddToTail(ListNode** pHead, int value);
+void RemoveNode(ListNode** pHead, int value);
+
+ListNode* CreateListNode(int value)
+{
+    ListNode* pNode = new ListNode();
+    pNode->m_nValue = value;
+    pNode->m_pNext = nullptr;
+
+    return pNode;
+}
+
+void ConnectListNodes(ListNode* pCurrent, ListNode* pNext)
+{
+    if(pCurrent == nullptr)
+    {
+        printf("Error to connect two nodes.\n");
+        exit(1);
+    }
+
+    pCurrent->m_pNext = pNext;
+}
+
+void PrintListNode(ListNode* pNode)
+{ 
+    if(pNode == nullptr)
+    {
+        printf("The node is nullptr\n");
+    }
+    else
+    {
+        printf("The key in node is %d.\n", pNode->m_nValue);
+    }
+}
+
+void PrintList(ListNode* pHead)
+{
+    printf("PrintList starts.\n");
+    
+    ListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        printf("%d\t", pNode->m_nValue);
+        pNode = pNode->m_pNext;
+    }
+
+    printf("\nPrintList ends.\n");
+}
+
+void DestroyList(ListNode* pHead)
+{
+    ListNode* pNode = pHead;
+    while(pNode != nullptr)
+    {
+        pHead = pHead->m_pNext;
+        delete pNode;
+        pNode = pHead;
+    }
+}
+
+void AddToTail(ListNode** pHead, int value)
+{
+    ListNode* pNew = new ListNode();
+    pNew->m_nValue = value;
+    pNew->m_pNext = nullptr;
+
+    if(*pHead == nullptr)
+    {
+        *pHead = pNew;
+    }
+    else
+    {
+        ListNode* pNode = *pHead;
+        while(pNode->m_pNext != nullptr)
+            pNode = pNode->m_pNext;
+
+        pNode->m_pNext = pNew;
+    }
+}
+
+void RemoveNode(ListNode** pHead, int value)
+{
+    if(pHead == nullptr || *pHead == nullptr)
+        return;
+
+    ListNode* pToBeDeleted = nullptr;
+    if((*pHead)->m_nValue == value)
+    {
+        pToBeDeleted = *pHead;
+        *pHead = (*pHead)->m_pNext;
+    }
+    else
+    {
+        ListNode* pNode = *pHead;
+        while(pNode->m_pNext != nullptr && pNode->m_pNext->m_nValue != value)
+            pNode = pNode->m_pNext;
+
+        if(pNode->m_pNext != nullptr && pNode->m_pNext->m_nValue == value)
+        {
+            pToBeDeleted = pNode->m_pNext;
+            pNode->m_pNext = pNode->m_pNext->m_pNext;
+        }
+    }
+
+    if(pToBeDeleted != nullptr)
+    {
+        delete pToBeDeleted;
+        pToBeDeleted = nullptr;
+    }
+}
 
 unsigned int GetListLength(ListNode* pHead);
 
@@ -70,17 +195,142 @@ unsigned int GetListLength(ListNode* pHead)
 // ====================测试代码====================
 void DestroyNode(ListNode* pNode);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ListNode *LrFindFirstCommonNode(ListNode* pHead1, ListNode* pHead2) {
+  int len1 = 0;
+  int len2 = 0;
+  auto pNode1 = pHead1;
+  auto pNode2 = pHead2;
+  while (pNode1) {
+    len1++;
+    pNode1 = pNode1->m_pNext;
+  }
+  while (pNode2) {
+    len2++;
+    pNode2 = pNode2->m_pNext;
+  }
+  bool is_list1_longer = len1 >= len2;
+  auto pLongerList = pHead1;
+  auto pShorterList = pHead2;
+  int longer_len = len1;
+  int shorter_len = len2;
+  if (!is_list1_longer) {
+    std::swap(pLongerList, pShorterList);
+    std::swap(longer_len, shorter_len);
+  }
+  int len_diff = longer_len - shorter_len;
+  for (int i = 0; i < len_diff; i++) {
+    pLongerList = pLongerList->m_pNext;
+  }
+  while (pLongerList != pShorterList) {
+    if (pLongerList == nullptr || pShorterList == nullptr) {
+      return nullptr;
+    }
+    pLongerList = pLongerList->m_pNext;
+    pShorterList = pShorterList->m_pNext;
+  }
+  return pShorterList;
+}
+
 void Test(char* testName, ListNode* pHead1, ListNode* pHead2, ListNode* pExpected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    ListNode* pResult = FindFirstCommonNode(pHead1, pHead2);
+    ListNode* pResult = LrFindFirstCommonNode(pHead1, pHead2);
     if(pResult == pExpected)
         printf("Passed.\n");
     else
         printf("Failed.\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 第一个公共结点在链表中间
 // 1 - 2 - 3 \

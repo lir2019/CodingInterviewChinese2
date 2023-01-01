@@ -19,6 +19,45 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int GetNumberSameAsIndex(const int* numbers, int length)
 {
     if(numbers == nullptr || length <= 0)
@@ -41,14 +80,131 @@ int GetNumberSameAsIndex(const int* numbers, int length)
     return -1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrGetNumberSameAsIndex(int *numbers, int length) {
+  if (numbers == nullptr) {
+    return -1;
+  }
+  int b = 0;
+  int e = length;
+  int m = (b + e) / 2;
+  while (e - b > 1) {
+    if (numbers[m] > m) {
+      e = m;
+    } else {
+      b = m;
+    }
+    m = (b + e) / 2;
+  }
+  if (e - b == 1) {
+    if (numbers[b] == b) {
+      return b;
+    } else {
+      return -1;
+    }
+  }
+  return -1;
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(const char* testName, int numbers[], int length, int expected)
 {
-    if(GetNumberSameAsIndex(numbers, length) == expected)
+    if(LrGetNumberSameAsIndex(numbers, length) == expected)
         printf("%s passed.\n", testName);
     else
         printf("%s FAILED.\n", testName);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Test1()
 {

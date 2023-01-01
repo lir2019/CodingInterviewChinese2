@@ -18,6 +18,56 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int GetFirstK(const int* data, int length, int k, int start, int end);
 int GetLastK(const int* data, int length, int k, int start, int end);
 
@@ -87,18 +137,153 @@ int GetLastK(const int* data, int length, int k, int start, int end)
     return GetLastK(data, length, k, start, end);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrCore1(int *data, int begin, int end, int k) {
+  int b = begin;
+  int e = end;
+  int m = (b + e) / 2;
+  while (e - b > 1) {
+    if (data[m] < k) {
+      b = m;
+    } else {
+      e = m;
+    }
+    m = (b + e) / 2;
+  }
+  if (e - b == 1) {
+    if (data[b] < k) {
+      return b;
+    } else {
+      return b - 1;
+    }
+  }
+  return begin - 1;
+}
+
+int LrCore2(int *data, int begin, int end, int k) {
+  int b = begin;
+  int e = end;
+  int m = (b + e) / 2;
+  while (e - b > 1) {
+    if (data[m] > k) {
+      e = m;
+    } else {
+      b = m;
+    }
+    m = (b + e) / 2;
+  }
+  if (e - b == 1) {
+    if (data[b] > k) {
+      return b;
+    } else {
+      return e;
+    }
+  }
+  return begin;
+}
+
+int LrGetNumberOfK(int *data, int length, int k) {
+  int pre = LrCore1(data, 0, length, k);
+  int post = LrCore2(data, 0, length, k);
+  return post - pre - 1;
+}
+
+
 // ====================测试代码====================
 void Test(const char* testName, int data[], int length, int k, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    int result = GetNumberOfK(data, length, k);
+    int result = LrGetNumberOfK(data, length, k);
     if(result == expected)
         printf("Passed.\n");
     else
         printf("Failed.\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 查找的数字出现在数组的中间
 void Test1()

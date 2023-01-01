@@ -19,6 +19,52 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int GetMissingNumber(const int* numbers, int length)
 {
     if(numbers == nullptr || length <= 0)
@@ -47,18 +93,134 @@ int GetMissingNumber(const int* numbers, int length)
     return -1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrGetMissingNumber(int *numbers, int length) {
+  if (numbers == nullptr) {
+    return -1;
+  }
+  int b = 0;
+  int e = length;
+  int m = (b + e) / 2;
+  while (e - b > 1) {
+    if (numbers[m] > m) {
+      e = m;
+    } else {
+      b = m;
+    }
+    m = (b + e) / 2;
+  }
+  if (e - b == 1) {
+    if (numbers[b] > b) {
+      return b;
+    } else {
+      return e;
+    }
+  }
+  return b;
+}
+
+
+
+
+
 // ====================测试代码====================
 void Test(const char* testName, int numbers[], int length, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    int result = GetMissingNumber(numbers, length);
+    int result = LrGetMissingNumber(numbers, length);
     if(result == expected)
         printf("Passed.\n");
     else
         printf("Failed.\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 缺失的是第一个数字0
 void Test1()
