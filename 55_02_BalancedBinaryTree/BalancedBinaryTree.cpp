@@ -17,7 +17,136 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 任意结点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
 
 #include <cstdio>
-#include "..\Utilities\BinaryTree.h"
+#include <algorithm>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct BinaryTreeNode 
+{
+    int                    m_nValue; 
+    BinaryTreeNode*        m_pLeft;  
+    BinaryTreeNode*        m_pRight; 
+};
+
+BinaryTreeNode* CreateBinaryTreeNode(int value);
+void ConnectTreeNodes(BinaryTreeNode* pParent, BinaryTreeNode* pLeft, BinaryTreeNode* pRight);
+void PrintTreeNode(const BinaryTreeNode* pNode);
+void PrintTree(const BinaryTreeNode* pRoot);
+void DestroyTree(BinaryTreeNode* pRoot);
+
+BinaryTreeNode* CreateBinaryTreeNode(int value)
+{
+    BinaryTreeNode* pNode = new BinaryTreeNode();
+    pNode->m_nValue = value;
+    pNode->m_pLeft = nullptr;
+    pNode->m_pRight = nullptr;
+
+    return pNode;
+}
+
+void ConnectTreeNodes(BinaryTreeNode* pParent, BinaryTreeNode* pLeft, BinaryTreeNode* pRight)
+{
+    if(pParent != nullptr)
+    {
+        pParent->m_pLeft = pLeft;
+        pParent->m_pRight = pRight;
+    }
+}
+
+void PrintTreeNode(const BinaryTreeNode* pNode)
+{
+    if(pNode != nullptr)
+    {
+        printf("value of this node is: %d\n", pNode->m_nValue);
+
+        if(pNode->m_pLeft != nullptr)
+            printf("value of its left child is: %d.\n", pNode->m_pLeft->m_nValue);
+        else
+            printf("left child is nullptr.\n");
+
+        if(pNode->m_pRight != nullptr)
+            printf("value of its right child is: %d.\n", pNode->m_pRight->m_nValue);
+        else
+            printf("right child is nullptr.\n");
+    }
+    else
+    {
+        printf("this node is nullptr.\n");
+    }
+
+    printf("\n");
+}
+
+void PrintTree(const BinaryTreeNode* pRoot)
+{
+    PrintTreeNode(pRoot);
+
+    if(pRoot != nullptr)
+    {
+        if(pRoot->m_pLeft != nullptr)
+            PrintTree(pRoot->m_pLeft);
+
+        if(pRoot->m_pRight != nullptr)
+            PrintTree(pRoot->m_pRight);
+    }
+}
+
+void DestroyTree(BinaryTreeNode* pRoot)
+{
+    if(pRoot != nullptr)
+    {
+        BinaryTreeNode* pLeft = pRoot->m_pLeft;
+        BinaryTreeNode* pRight = pRoot->m_pRight;
+
+        delete pRoot;
+        pRoot = nullptr;
+
+        DestroyTree(pLeft);
+        DestroyTree(pRight);
+    }
+}
 
 // ====================方法1====================
 int TreeDepth(const BinaryTreeNode* pRoot)
@@ -78,6 +207,76 @@ bool IsBalanced(const BinaryTreeNode* pRoot, int* pDepth)
     return false;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bool LrCore(const BinaryTreeNode *pNode, int &height) {
+  if (pNode == nullptr) {
+    height = 0;
+    return true;
+  }
+  int lheight, rheight;
+  bool is_left_balance = LrCore(pNode->m_pLeft, lheight);
+  bool is_right_balance = LrCore(pNode->m_pRight, rheight);
+  height = std::max(lheight, rheight) + 1;
+  if (std::abs(lheight - rheight) <= 1) {
+    return is_left_balance && is_right_balance;
+  }
+  return false;
+}
+
+bool LrIsBalanced_Solution(const BinaryTreeNode *pRoot) {
+  int height;
+  return LrCore(pRoot, height);
+}
+
 // ====================测试代码====================
 void Test(const char* testName, const BinaryTreeNode* pRoot, bool expected)
 {
@@ -85,7 +284,7 @@ void Test(const char* testName, const BinaryTreeNode* pRoot, bool expected)
         printf("%s begins:\n", testName);
 
     printf("Solution1 begins: ");
-    if(IsBalanced_Solution1(pRoot) == expected)
+    if(LrIsBalanced_Solution(pRoot) == expected)
         printf("Passed.\n");
     else
         printf("Failed.\n");

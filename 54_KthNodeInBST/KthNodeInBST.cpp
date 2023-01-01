@@ -16,7 +16,136 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 题目：给定一棵二叉搜索树，请找出其中的第k大的结点。
 
 #include <cstdio>
-#include "../Utilities/BinaryTree.h"
+#include <stack>
+#include <set>
+#include <map>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct BinaryTreeNode 
+{
+    int                    m_nValue; 
+    BinaryTreeNode*        m_pLeft;  
+    BinaryTreeNode*        m_pRight; 
+};
+
+BinaryTreeNode* CreateBinaryTreeNode(int value);
+void ConnectTreeNodes(BinaryTreeNode* pParent, BinaryTreeNode* pLeft, BinaryTreeNode* pRight);
+void PrintTreeNode(const BinaryTreeNode* pNode);
+void PrintTree(const BinaryTreeNode* pRoot);
+void DestroyTree(BinaryTreeNode* pRoot);
+
+BinaryTreeNode* CreateBinaryTreeNode(int value)
+{
+    BinaryTreeNode* pNode = new BinaryTreeNode();
+    pNode->m_nValue = value;
+    pNode->m_pLeft = nullptr;
+    pNode->m_pRight = nullptr;
+
+    return pNode;
+}
+
+void ConnectTreeNodes(BinaryTreeNode* pParent, BinaryTreeNode* pLeft, BinaryTreeNode* pRight)
+{
+    if(pParent != nullptr)
+    {
+        pParent->m_pLeft = pLeft;
+        pParent->m_pRight = pRight;
+    }
+}
+
+void PrintTreeNode(const BinaryTreeNode* pNode)
+{
+    if(pNode != nullptr)
+    {
+        printf("value of this node is: %d\n", pNode->m_nValue);
+
+        if(pNode->m_pLeft != nullptr)
+            printf("value of its left child is: %d.\n", pNode->m_pLeft->m_nValue);
+        else
+            printf("left child is nullptr.\n");
+
+        if(pNode->m_pRight != nullptr)
+            printf("value of its right child is: %d.\n", pNode->m_pRight->m_nValue);
+        else
+            printf("right child is nullptr.\n");
+    }
+    else
+    {
+        printf("this node is nullptr.\n");
+    }
+
+    printf("\n");
+}
+
+void PrintTree(const BinaryTreeNode* pRoot)
+{
+    PrintTreeNode(pRoot);
+
+    if(pRoot != nullptr)
+    {
+        if(pRoot->m_pLeft != nullptr)
+            PrintTree(pRoot->m_pLeft);
+
+        if(pRoot->m_pRight != nullptr)
+            PrintTree(pRoot->m_pRight);
+    }
+}
+
+void DestroyTree(BinaryTreeNode* pRoot)
+{
+    if(pRoot != nullptr)
+    {
+        BinaryTreeNode* pLeft = pRoot->m_pLeft;
+        BinaryTreeNode* pRight = pRoot->m_pRight;
+
+        delete pRoot;
+        pRoot = nullptr;
+
+        DestroyTree(pLeft);
+        DestroyTree(pRight);
+    }
+}
 
 const BinaryTreeNode* KthNodeCore(const BinaryTreeNode* pRoot, unsigned int& k);
 
@@ -49,18 +178,164 @@ const BinaryTreeNode* KthNodeCore(const BinaryTreeNode* pRoot, unsigned int& k)
     return target;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrKthNodeCore(const BinaryTreeNode *pNode, unsigned int k, int &num, const BinaryTreeNode * &pKthNode) {
+  if (pNode) {
+    LrKthNodeCore(pNode->m_pLeft, k, num, pKthNode);
+    num++;
+    if (num == k) {
+      pKthNode = pNode;
+      return;
+    }
+    LrKthNodeCore(pNode->m_pRight, k, num, pKthNode);
+  }
+}
+
+const BinaryTreeNode *LrKthNode(const BinaryTreeNode *pRoot, unsigned int k) {
+  int num = 0;
+  const BinaryTreeNode *pKthNode = nullptr;
+  LrKthNodeCore(pRoot, k, num, pKthNode);
+  return pKthNode;
+}
+
+const BinaryTreeNode *LrKthNode2(const BinaryTreeNode *pRoot, unsigned int k) {
+  if (pRoot == nullptr) {
+    return nullptr;
+  }
+  std::stack<std::pair<const BinaryTreeNode*, bool>> node_stack;
+  node_stack.push(std::make_pair(pRoot, false));
+  int num = 0;
+  while (!node_stack.empty()) {
+    auto node_flag = node_stack.top();
+    node_stack.pop();
+    if (node_flag.second) {
+      num++;
+      if (num == k) {
+        return node_flag.first;
+      }
+    } else {
+      if (node_flag.first->m_pRight) {
+        node_stack.push(std::make_pair(node_flag.first->m_pRight, false));
+      }
+      node_stack.push(std::make_pair(node_flag.first, true));
+      if (node_flag.first->m_pLeft) {
+        node_stack.push(std::make_pair(node_flag.first->m_pLeft, false));
+      }
+    }
+  }
+  return nullptr;
+}
+
 // ====================测试代码====================
 void Test(const char* testName, const BinaryTreeNode* pRoot, unsigned int k, bool isNull, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    const BinaryTreeNode* pTarget = KthNode(pRoot, k);
+    const BinaryTreeNode* pTarget = LrKthNode2(pRoot, k);
     if((isNull && pTarget == nullptr) || (!isNull && pTarget->m_nValue == expected))
         printf("Passed.\n");
     else
         printf("FAILED.\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //            8
 //        6      10

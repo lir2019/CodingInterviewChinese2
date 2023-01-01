@@ -18,6 +18,54 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 unsigned int FindFirstBitIs1(int num);
 bool IsBit1(int num, unsigned int indexBit);
 
@@ -62,6 +110,61 @@ bool IsBit1(int num, unsigned int indexBit)
     return (num & 1);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrFindNumsAppearOnce(int *data, int length, int *result1, int *result2) {
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(const char* testName, int data[], int length, int expected1, int expected2)
 {
@@ -69,7 +172,7 @@ void Test(const char* testName, int data[], int length, int expected1, int expec
         printf("%s begins: ", testName);
 
     int result1, result2;
-    FindNumsAppearOnce(data, length, &result1, &result2);
+    LrFindNumsAppearOnce(data, length, &result1, &result2);
 
     if((expected1 == result1 && expected2 == result2) ||
         (expected2 == result1 && expected1 == result2))
@@ -77,6 +180,41 @@ void Test(const char* testName, int data[], int length, int expected1, int expec
     else
         printf("Failed.\n\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Test1()
 {
