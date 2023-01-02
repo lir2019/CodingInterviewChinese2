@@ -18,6 +18,53 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include <cstdlib>
+#include <algorithm>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int Compare(const void *arg1, const void *arg2);
 
@@ -57,17 +104,142 @@ int Compare(const void *arg1, const void *arg2)
     return *(int*) arg1 - *(int*) arg2;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 大小王当成0
+bool LrIsContinuous(int *numbers, int length) {
+  if (numbers == nullptr) {
+    return false;
+  }
+  std::sort(numbers, numbers + length);
+  int king_num = 0;
+  while (numbers[king_num] == 0) {
+    king_num++;
+  }
+  int other_begin = king_num;
+  int other_length = length - king_num;
+  bool has_pair = std::unique(numbers + other_begin, numbers + length) != numbers + length;
+  if (has_pair) {
+    return false;
+  }
+  int diff = numbers[length - 1] - numbers[other_begin];
+  if (king_num == 0) {
+    return diff == 4;
+  } else if (king_num == 1) {
+    return diff == 4 || diff == 3;
+  } else if (king_num == 2) {
+    return diff == 4 || diff == 3 || diff == 2;
+  } else if (king_num == 3) {
+    return diff == 4 || diff == 3 || diff == 2 || diff == 1;
+  } else {
+    return true;
+  }
+}
+
 // ====================测试代码====================
 void Test(const char* testName, int* numbers, int length, bool expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(IsContinuous(numbers, length) == expected)
+    if(LrIsContinuous(numbers, length) == expected)
         printf("Passed.\n");
     else
         printf("Failed.\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Test1()
 {

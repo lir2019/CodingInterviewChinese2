@@ -19,6 +19,52 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 收获最大的利润11。
 
 #include <cstdio>
+#include <limits>
+#include <algorithm>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int MaxDiff(const int* numbers, unsigned length)
 {
@@ -41,17 +87,141 @@ int MaxDiff(const int* numbers, unsigned length)
     return maxDiff;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrCore(const int *numbers, unsigned int length, int &max, int &min) {
+  if (length == 0) {
+    throw;
+  }
+  if (length == 1) {
+    max = min = numbers[0];
+    return std::numeric_limits<int>::min();
+  }
+  int b = 0;
+  int e = length;
+  int m = (b + e) / 2;
+  int left_max, left_min;
+  int left_max_diff = LrCore(numbers, m, left_max, left_min);
+  int right_max, right_min;
+  int right_max_diff = LrCore(numbers + m, e - m, right_max, right_min);
+  max = std::max(right_max, left_max);
+  min = std::min(right_min, left_min);
+  return std::max(std::max(left_max_diff, right_max_diff), right_max - left_min);
+}
+
+int LrMaxDiff(const int *numbers, unsigned int length) {
+  if (numbers == nullptr || length <= 1) {
+    return 0;
+  }
+  int max, min;
+  return LrCore(numbers, length, max, min);
+}
+
 // ==================== Test Code ====================
 void Test(const char* testName, const int* numbers, unsigned int length, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    if(MaxDiff(numbers, length) == expected)
+    if(LrMaxDiff(numbers, length) == expected)
         printf("Passed.\n");
     else
         printf("FAILED.\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Test1()
 {

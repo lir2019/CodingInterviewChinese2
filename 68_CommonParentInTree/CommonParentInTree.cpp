@@ -16,8 +16,144 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 题目：输入两个树结点，求它们的最低公共祖先。
 
 #include <cstdio>
-#include "..\Utilities\Tree.h"
 #include <list>
+#include <vector>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct TreeNode 
+{
+    int                       m_nValue;    
+    std::vector<TreeNode*>    m_vChildren;    
+};
+
+TreeNode* CreateTreeNode(int value);
+void ConnectTreeNodes(TreeNode* pParent, TreeNode* pChild);
+void PrintTreeNode(const TreeNode* pNode);
+void PrintTree(const TreeNode* pRoot);
+void DestroyTree(TreeNode* pRoot);
+
+TreeNode* CreateTreeNode(int value)
+{
+    TreeNode* pNode = new TreeNode();
+    pNode->m_nValue = value;
+
+    return pNode;
+}
+
+void ConnectTreeNodes(TreeNode* pParent, TreeNode* pChild)
+{
+    if(pParent != nullptr)
+    {
+        pParent->m_vChildren.push_back(pChild);
+    }
+}
+
+void PrintTreeNode(const TreeNode* pNode)
+{
+    if(pNode != nullptr)
+    {
+        printf("value of this node is: %d.\n", pNode->m_nValue);
+
+        printf("its children is as the following:\n");
+        std::vector<TreeNode*>::const_iterator i = pNode->m_vChildren.begin();
+        while(i < pNode->m_vChildren.end())
+        {
+            if(*i != nullptr)
+                printf("%d\t", (*i)->m_nValue);
+        }
+
+        printf("\n");
+    }
+    else
+    {
+        printf("this node is nullptr.\n");
+    }
+
+    printf("\n");
+}
+
+void PrintTree(const TreeNode* pRoot)
+{
+    PrintTreeNode(pRoot);
+
+    if(pRoot != nullptr)
+    {
+        std::vector<TreeNode*>::const_iterator i = pRoot->m_vChildren.begin();
+        while(i < pRoot->m_vChildren.end())
+        {
+            PrintTree(*i);
+            ++i;
+        }
+    }
+}
+
+void DestroyTree(TreeNode* pRoot)
+{
+    if(pRoot != nullptr)
+    {
+        std::vector<TreeNode*>::iterator i = pRoot->m_vChildren.begin();
+        while(i < pRoot->m_vChildren.end())
+        {
+            DestroyTree(*i);
+            ++i;
+        }
+
+        delete pRoot;
+    }
+}
 
 using namespace std;
 
@@ -80,13 +216,102 @@ const TreeNode* GetLastCommonParent(const TreeNode* pRoot, const TreeNode* pNode
     return GetLastCommonNode(path1, path2);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrGetAncesters(const TreeNode *pNode, const TreeNode *pTarget, bool &finish, std::vector<const TreeNode *> &pAncesters) {
+  if (finish) {
+    return;
+  }
+  if (pNode == nullptr) {
+    return;
+  }
+  if (pTarget == pNode) {
+    finish = true;
+    return;
+  }
+  pAncesters.push_back(pNode);
+  for (auto child : pNode->m_vChildren) {
+    LrGetAncesters(child, pTarget, finish, pAncesters);
+    if (finish) {
+      return;
+    }
+  }
+  pAncesters.pop_back();
+}
+
+const TreeNode *LrGetLastCommonParent(const TreeNode* pRoot, const TreeNode* pNode1, const TreeNode* pNode2) {
+  if (pRoot == nullptr || pNode1 == nullptr || pNode2 == nullptr) {
+    return nullptr;
+  }
+  std::vector<const TreeNode *> pAnc1, pAnc2;
+  bool is_finish1 = false, is_finish2 = false;
+  LrGetAncesters(pRoot, pNode1, is_finish1, pAnc1);
+  LrGetAncesters(pRoot, pNode2, is_finish2, pAnc2);
+  const TreeNode *last_anc = nullptr;
+  for (int i = 0; i < pAnc1.size() && i < pAnc2.size(); i++) {
+    if (pAnc1[i] == pAnc2[i]) {
+      last_anc = pAnc1[i];
+    } else {
+      break;
+    }
+  }
+  return last_anc;
+}
+
+
 // ====================测试代码====================
 void Test(const char* testName, const TreeNode* pRoot, const TreeNode* pNode1, const TreeNode* pNode2, TreeNode* pExpected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    const TreeNode* pResult = GetLastCommonParent(pRoot, pNode1, pNode2);
+    const TreeNode* pResult = LrGetLastCommonParent(pRoot, pNode1, pNode2);
 
     if((pExpected == nullptr && pResult == nullptr) || 
         (pExpected != nullptr && pResult != nullptr && pResult->m_nValue == pExpected->m_nValue))

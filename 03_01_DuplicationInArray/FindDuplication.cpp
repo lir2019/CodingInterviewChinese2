@@ -19,6 +19,46 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 参数:
 //        numbers:     一个整数数组
 //        length:      数组的长度
@@ -69,12 +109,114 @@ bool contains(int array[], int length, int number)
     return false;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void countPivot(int *number, int len, int pivot, int &gt_num, int &eq_num, int &lt_num) {
+  gt_num = 0;
+  eq_num = 0;
+  lt_num = 0;
+  for (int i = 0; i < len; i++) {
+    if (number[i] > pivot) {
+      gt_num++;
+    } else if (number[i] < pivot) {
+      lt_num++;
+    } else {
+      eq_num++;
+    }
+  }
+  return;
+}
+
+bool Lrduplicate(int numbers[], int lengthNumbers, int *d) {
+  if (numbers == nullptr || lengthNumbers <= 0) {
+    return false;
+  }
+  int min = 1;
+  int max = lengthNumbers - 1;
+  int mid = (min + max) / 2;
+  while (max - min >= 2) {
+    int lt_len = mid - min;
+    int gt_len = max - mid;
+    int gt_num = 0, lt_num = 0, eq_num = 0;
+    countPivot(numbers, lengthNumbers, mid, gt_num, eq_num, lt_num);
+    if (eq_num > 1) {
+      *d = mid;
+      return true;
+    } else if (gt_num > gt_len) {
+      min = mid + 1;
+    } else if (lt_num > lt_len) {
+      max = mid - 1;
+    } else {
+      return false;
+    }
+    mid = (min + max) / 2;
+  }
+  for (int i = min; i <= max; i++) {
+    int gt_num = 0, lt_num = 0, eq_num = 0;
+    countPivot(numbers, lengthNumbers, i, gt_num, eq_num, lt_num);
+    if (eq_num > 1) {
+      *d = i;
+      return true;
+    }
+  }
+  return false;
+}
+
+
 void test(char* testName, int numbers[], int lengthNumbers, int expected[], int expectedExpected, bool validArgument)
 {
     printf("%s begins: ", testName);
 
     int duplication;
-    bool validInput = duplicate(numbers, lengthNumbers, &duplication);
+    bool validInput = Lrduplicate(numbers, lengthNumbers, &duplication);
 
     if(validArgument == validInput)
     {
@@ -140,7 +282,7 @@ void test6()
     test("Test6", numbers, 0, duplications, sizeof(duplications) / sizeof(int), false);
 }
 
-void main()
+int main()
 {
     test1();
     test2();

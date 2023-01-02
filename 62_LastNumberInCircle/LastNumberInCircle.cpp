@@ -19,6 +19,41 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 #include <cstdio>
 #include <list>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 using namespace std;
 
 // ====================·½·¨1====================
@@ -68,13 +103,98 @@ int LastRemaining_Solution2(unsigned int n, unsigned int m)
     return last;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+std::list<unsigned int>::const_iterator LrNext(const std::list<unsigned int> &chain, std::list<unsigned int>::const_iterator iter) {
+  if (iter == chain.cend()) {
+    iter = chain.cbegin();
+  }
+  iter++;
+  if (iter == chain.cend()) {
+    iter = chain.cbegin();
+  }
+  return iter;
+}
+
+int LrLastRemaining_Solution(unsigned int n, unsigned int m) {
+  if (n == 0) {
+    return -1;
+  }
+  std::list<unsigned int> chain;
+  for (int i = 0; i < n; i++) {
+    chain.push_back(i);
+  }
+  auto iter = chain.cbegin();
+  while (chain.size() > 1) {
+    for (int i = 0; i < m - 1; i++) {
+      iter = LrNext(chain, iter);
+    }
+    auto next_iter = LrNext(chain, iter);
+    chain.erase(iter);
+    iter = next_iter;
+  }
+  return chain.front();
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(const char* testName, unsigned int n, unsigned int m, int expected)
 {
     if(testName != nullptr)
         printf("%s begins: \n", testName);
 
-    if(LastRemaining_Solution1(n, m) == expected)
+    if(LrLastRemaining_Solution(n, m) == expected)
         printf("Solution1 passed.\n");
     else
         printf("Solution1 failed.\n");
@@ -86,6 +206,38 @@ void Test(const char* testName, unsigned int n, unsigned int m, int expected)
 
     printf("\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Test1()
 {

@@ -18,6 +18,47 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 long long StrToIntCore(const char* str, bool minus);
 
 enum Status {kValid = 0, kInvalid};
@@ -79,15 +120,162 @@ long long StrToIntCore(const char* digit, bool minus)
     return num;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+unsigned int LrStrToPosInt(const char *string) {
+  if (string == nullptr || string[0] == '\0') {
+    g_nStatus = kInvalid;
+    return 0;
+  }
+  unsigned int ret = 0;
+  unsigned int old = 0;
+  while (*string != '\0' && *string != ' ') {
+    int digit = *string - '0';
+    if (digit < 0 || digit > 9) {
+      g_nStatus = kInvalid;
+      return 0;
+    }
+    old = ret;
+    ret *= 10;
+    if (ret / 10 != old) {
+      g_nStatus = kInvalid;
+      return 0;
+    }
+    ret += digit;
+    string++;
+  }
+  return ret;
+}
+
+int LrStrToInt(const char *string) {
+  g_nStatus = kValid;
+  if (string == nullptr) {
+    g_nStatus = kInvalid;
+    return 0;
+  }
+  while (*string == ' ') {
+    string++;
+  }
+  if (string[0] == '\0') {
+    g_nStatus = kInvalid;
+    return 0;
+  }
+  if (string[0] == '+') {
+    unsigned int pos = LrStrToPosInt(string + 1);
+    if (pos >= 0x80000000) {
+      g_nStatus = kInvalid;
+      return 0;
+    }
+    return pos;
+  } else if (string[0] == '-') {
+    unsigned int pos = LrStrToPosInt(string + 1);
+    if (pos > 0x80000000) {
+      g_nStatus = kInvalid;
+      return 0;
+    }
+    if (pos == 0x80000000) {
+      return 0x80000000;
+    }
+    return -(int)pos;
+  }
+  return LrStrToPosInt(string);
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(const char* string)
 {
-    int result = StrToInt(string);
+    int result = LrStrToInt(string);
     if(result == 0 && g_nStatus == kInvalid)
         printf("the input %s is invalid.\n", string);
     else
         printf("number for %s is: %d.\n", string, result);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main(int argc, char* argv[])
 {

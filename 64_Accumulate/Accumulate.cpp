@@ -18,6 +18,45 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ====================方法一====================
 class Temp
 {
@@ -110,12 +149,69 @@ template <> struct Sum_Solution4<0>
     enum Value { N = 0};
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrSum_Solution(int n) {
+}
+
 // ====================测试代码====================
 void Test(int n, int expected)
 {
     printf("Test for %d begins:\n", n);
 
-    if(Sum_Solution1(n) == expected)
+    if(LrSum_Solution(n) == expected)
         printf("Solution1 passed.\n");
     else
         printf("Solution1 failed.\n");

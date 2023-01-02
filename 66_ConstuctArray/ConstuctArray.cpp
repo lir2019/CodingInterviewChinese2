@@ -18,12 +18,53 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include <vector>
+#include <math.h>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 using namespace std;
 
 void BuildProductionArray(const vector<double>& input, vector<double>& output)
 {
     int length1 = input.size();
+    output.resize(length1);
     int length2 = output.size();
 
     if(length1 == length2 && length2 > 1)
@@ -61,11 +102,67 @@ static bool EqualArrays(const vector<double>& input, const vector<double>& outpu
     return true;
 }
 
-static void test(char* testName, const vector<double>& input, vector<double>& output, const vector<double>& expected)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrBuildProductionArray(const vector<double>& input, vector<double>& output) {
+  int len = input.size();
+  output.resize(len, 1.0);
+}
+
+static void test(char* testName, const vector<double>& input, const vector<double>& expected)
 {
     printf("%s Begins: ", testName);
-
-    BuildProductionArray(input, output);
+    vector<double> output;
+    LrBuildProductionArray(input, output);
     if(EqualArrays(output, expected))
         printf("Passed.\n");
     else
@@ -80,7 +177,6 @@ static void test1()
     double expected[] = { 120, 60, 40, 30, 24 };
 
     test("Test1", vector<double>(input, input + sizeof(input) / sizeof(double)),
-        vector<double>(output, output + sizeof(output) / sizeof(double)),
         vector<double>(expected, expected + sizeof(expected) / sizeof(double)));
 }
 
@@ -92,7 +188,6 @@ static void test2()
     double expected[] = { 0, 0, 40, 0, 0 };
 
     test("Test2", vector<double>(input, input + sizeof(input) / sizeof(double)),
-        vector<double>(output, output + sizeof(output) / sizeof(double)),
         vector<double>(expected, expected + sizeof(expected) / sizeof(double)));
 }
 
@@ -104,7 +199,6 @@ static void test3()
     double expected[] = { 0, 0, 0, 0, 0 };
 
     test("Test3", vector<double>(input, input + sizeof(input) / sizeof(double)),
-        vector<double>(output, output + sizeof(output) / sizeof(double)),
         vector<double>(expected, expected + sizeof(expected) / sizeof(double)));
 }
 
@@ -116,7 +210,6 @@ static void test4()
     double expected[] = { 120, -60, 40, -30, 24 };
 
     test("Test4", vector<double>(input, input + sizeof(input) / sizeof(double)),
-        vector<double>(output, output + sizeof(output) / sizeof(double)),
         vector<double>(expected, expected + sizeof(expected) / sizeof(double)));
 }
 
@@ -128,7 +221,6 @@ static void test5()
     double expected[] = { -2, 1 };
 
     test("Test5", vector<double>(input, input + sizeof(input) / sizeof(double)),
-        vector<double>(output, output + sizeof(output) / sizeof(double)),
         vector<double>(expected, expected + sizeof(expected) / sizeof(double)));
 }
 

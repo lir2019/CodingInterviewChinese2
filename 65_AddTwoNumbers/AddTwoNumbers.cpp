@@ -34,10 +34,87 @@ int Add(int num1, int num2)
     return num1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int LrAdd(int num1, int num2) {
+  constexpr int width = sizeof(int) * 8;
+  int res = 0;
+  bool flag = false;
+  for (int i = 0; i < width; i++) {
+    int mask = (int)1 << i;
+    int num1_bit = num1 & mask;
+    int num2_bit = num2 & mask;
+    int count = 0;
+    if (flag) count++;
+    if (num1_bit) count++;
+    if (num2_bit) count++;
+    if (count == 3) {
+      res = res | mask;
+      flag = true;
+    } else if (count == 2) {
+      flag = true;
+    } else if (count == 1) {
+      res = res | mask;
+      flag = false;
+    } else if (count == 0) {
+      flag = false;
+    }
+  }
+  return res;
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int num1, int num2, int expected)
 {
-    int result = Add(num1, num2);
+    int result = LrAdd(num1, num2);
     if(result == expected)
         printf("%d + %d is %d. Passed\n", num1, num2, result);
     else
