@@ -18,8 +18,68 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 字2，该函数将返回左旋转2位得到的结果"cdefgab"。
 
 #include <cstdio>
-#include "..\Utilities\StringUtil.h"
 #include <string.h>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void Reverse(char *pBegin, char *pEnd);
+
+void Reverse(char *pBegin, char *pEnd)
+{
+    if(pBegin == nullptr || pEnd == nullptr)
+        return;
+
+    while(pBegin < pEnd)
+    {
+        char temp = *pBegin;
+        *pBegin = *pEnd;
+        *pEnd = temp;
+
+        pBegin ++, pEnd --;
+    }
+}
 
 char* LeftRotateString(char* pStr, int n)
 {
@@ -45,13 +105,84 @@ char* LeftRotateString(char* pStr, int n)
     return pStr;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+char *LrLeftRotateString(char *input, int num) {
+  if (input == nullptr) {
+    return nullptr;
+  }
+  char *tmp_bk = new char[num];
+  for (int i = 0; i < num; i++) {
+    tmp_bk[i] = input[i];
+  }
+  int len = 0;
+  for (; input[len + num] != '\0'; len++) {
+    input[len] = input[len + num];
+  }
+  for (int i = 0; i < num; i++) {
+    input[len + i] = tmp_bk[i];
+  }
+  delete [] tmp_bk;
+  return input;
+}
+
 // ====================测试代码====================
 void Test(const char* testName, char* input, int num, const char* expectedResult)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    char* result = LeftRotateString(input, num);
+    char* result = LrLeftRotateString(input, num);
 
     if((input == nullptr && expectedResult == nullptr)
         || (input != nullptr && strcmp(result, expectedResult) == 0))

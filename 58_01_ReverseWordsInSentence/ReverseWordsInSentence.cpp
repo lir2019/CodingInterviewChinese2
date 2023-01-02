@@ -18,8 +18,67 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 // 则输出"student. a am I"。
 
 #include <cstdio>
-#include "..\Utilities\StringUtil.h"
 #include <string>
+#include <string.h>
+#include <stack>
+#include <algorithm>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void Reverse(char *pBegin, char *pEnd);
+
+void Reverse(char *pBegin, char *pEnd)
+{
+    if(pBegin == nullptr || pEnd == nullptr)
+        return;
+
+    while(pBegin < pEnd)
+    {
+        char temp = *pBegin;
+        *pBegin = *pEnd;
+        *pEnd = temp;
+
+        pBegin ++, pEnd --;
+    }
+}
 
 char* ReverseSentence(char *pData)
 {
@@ -57,13 +116,92 @@ char* ReverseSentence(char *pData)
     return pData;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrReverseSentence(char *input) {
+  if (input == nullptr) {
+    return;
+  }
+  int len = strlen(input);
+  if (len <= 1) {
+    return;
+  }
+  std::reverse(input, input + len);
+  int begin = 0;
+  int end = 0;
+  while (true) {
+    while (input[end] != ' ' && input[end] != '\0') {
+      end++;
+    }
+    std::reverse(input + begin, input + end);
+    if (input[end] == '\0') {
+      break;
+    } else {
+      begin = end + 1;
+      end = begin;
+    }
+  }
+}
+
 // ====================测试代码====================
 void Test(const char* testName, char* input, const char* expectedResult)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    ReverseSentence(input);
+    LrReverseSentence(input);
 
     if((input == nullptr && expectedResult == nullptr)
         || (input != nullptr && strcmp(input, expectedResult) == 0))
@@ -71,6 +209,39 @@ void Test(const char* testName, char* input, const char* expectedResult)
     else
         printf("Failed.\n\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 功能测试，句子中有多个单词
 void Test1()

@@ -18,6 +18,47 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 bool FindNumbersWithSum(int data[], int length, int sum, 
                         int* num1, int* num2)
 {
@@ -48,6 +89,95 @@ bool FindNumbersWithSum(int data[], int length, int sum,
     return found;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bool LrFindNumbersWithSum(int *data, int length, int sum, int *num1, int *num2) {
+  if (data == nullptr) {
+    return false;
+  }
+  int b = 0;
+  int e = length - 1;
+  int tmp_sum = data[b] + data[e];
+  bool found = false;
+  while (true) {
+    while (b < length - 1 && tmp_sum < sum) {
+      b++;
+      tmp_sum = data[b] + data[e];
+    }
+    while (e > 0 && tmp_sum > sum) {
+      e--;
+      tmp_sum = data[b] + data[e];
+    }
+    if (tmp_sum == sum) {
+      found = true;
+      *num1 = data[b];
+      *num2 = data[e];
+      break;
+    }
+    if (e <= b) {
+      break;
+    }
+  }
+  return found;
+}
+
 // ====================测试代码====================
 void Test(const char* testName, int data[], int length, int sum, bool expectedReturn)
 {
@@ -55,7 +185,7 @@ void Test(const char* testName, int data[], int length, int sum, bool expectedRe
         printf("%s begins: ", testName);
     
     int num1, num2;
-    int result = FindNumbersWithSum(data, length, sum, &num1, &num2);
+    int result = LrFindNumbersWithSum(data, length, sum, &num1, &num2);
     if(result == expectedReturn)
     {
         if(result)
@@ -71,6 +201,42 @@ void Test(const char* testName, int data[], int length, int sum, bool expectedRe
     else
         printf("FAILED. \n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 存在和为s的两个数字，这两个数字位于数组的中间
 void Test1()

@@ -20,6 +20,44 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 #include <cstdio>
 #include <vector>
 #include <deque>
+#include <algorithm>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 using namespace std;
 
@@ -55,13 +93,70 @@ vector<int> maxInWindows(const vector<int>& num, unsigned int size)
     return maxInWindows;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+std::vector<int> LrmaxInWindows(const vector<int>& num, unsigned int size) {
+  return std::vector<int>();
+}
+
 // ====================≤‚ ‘¥˙¬Î====================
 void Test(const char* testName, const vector<int>& num, unsigned int size, const vector<int>& expected)
 {
     if(testName != nullptr)
         printf("%s begins: ", testName);
 
-    vector<int> result = maxInWindows(num, size);
+    vector<int> result = LrmaxInWindows(num, size);
 
     vector<int>::const_iterator iterResult = result.begin();
     vector<int>::const_iterator iterExpected = expected.begin();

@@ -18,6 +18,46 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 #include <math.h>
+#include <vector>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int g_maxValue = 6;
  
@@ -114,19 +154,135 @@ void PrintProbability_Solution2(int number)
     delete[] pProbabilities[1];
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrPrintProbability_Solution(int n) {
+  if (n == 0) {
+    return;
+  }
+  constexpr int number = 6;
+  const int min_s = n;
+  const int max_s = number * n;
+  std::vector<std::vector<double>> prob_mat;
+  std::vector<double> prob_vec(max_s, 0.0);
+  prob_mat.resize(n, prob_vec);
+  for (int i = 0; i < number; i++) {
+    prob_mat[0][i] = 1.0 / number;
+  }
+  for (int i = 1; i < n; i++) {
+    for (int j = i; j < (i + 1) * number; j++) {
+      prob_mat[i][j] += j - 1 >= 0 ? prob_mat[i - 1][j - 1] / number : 0.0;
+      prob_mat[i][j] += j - 2 >= 0 ? prob_mat[i - 1][j - 2] / number : 0.0;
+      prob_mat[i][j] += j - 3 >= 0 ? prob_mat[i - 1][j - 3] / number : 0.0;
+      prob_mat[i][j] += j - 4 >= 0 ? prob_mat[i - 1][j - 4] / number : 0.0;
+      prob_mat[i][j] += j - 5 >= 0 ? prob_mat[i - 1][j - 5] / number : 0.0;
+      prob_mat[i][j] += j - 6 >= 0 ? prob_mat[i - 1][j - 6] / number : 0.0;
+    }
+  }
+  for (int i = min_s - 1; i < max_s; i++) {
+    printf("%d: %e\n", i + 1, prob_mat[n - 1][i]);
+  }
+}
+
 // ====================²âÊÔ´úÂë====================
 void Test(int n)
 {
     printf("Test for %d begins:\n", n);
     
     printf("Test for solution1\n");
-    PrintProbability_Solution1(n);
+    LrPrintProbability_Solution(n);
 
     printf("Test for solution2\n");
     PrintProbability_Solution2(n);
 
     printf("\n");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main(int argc, char* argv[])
 {

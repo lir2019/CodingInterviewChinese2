@@ -19,6 +19,60 @@ https://github.com/zhedahht/CodingInterviewChinese2/blob/master/LICENSE.txt)
 
 #include <cstdio>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void PrintContinuousSequence(int small, int big);
 
 void FindContinuousSequence(int sum)
@@ -58,13 +112,97 @@ void PrintContinuousSequence(int small, int big)
     printf("\n");
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void LrFindContinuousSequence(int sum) {
+  int b = 1;
+  int e = 2;
+  int tmp_sum = b + e;
+  int max_b = sum / 2;
+  int max_e = (sum + 1) / 2;
+  bool change = true;
+  while (change) {
+    change = false;
+    if (b < max_b && tmp_sum > sum) {
+      tmp_sum -= b;
+      b++;
+      change = true;
+    }
+    if (e < max_e && tmp_sum < sum) {
+      e++;
+      tmp_sum += e;
+      change = true;
+    }
+    if (tmp_sum == sum) {
+      for (int i = b; i <= e; i++) {
+        printf("%d ", i);
+      }
+      printf("\n");
+      e++;
+      tmp_sum += e;
+      change = true;
+    }
+  }
+}
+
+
+
 // ====================²âÊÔ´úÂë====================
 void Test(const char* testName, int sum)
 {
     if(testName != nullptr)
         printf("%s for %d begins: \n", testName, sum);
 
-    FindContinuousSequence(sum);
+    LrFindContinuousSequence(sum);
 }
 
 int main(int argc, char* argv[])
